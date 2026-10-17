@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FHIR Resource Analyzer</title>
+  <style>
+    :root { color-scheme: light; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f7f8fa;
+      color: #17202a;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 42px 22px 56px; }
+    .hero { margin-bottom: 24px; }
+    .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #5f6b76; }
+    h1 { margin: 7px 0 8px; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; }
+    .subtitle { margin: 0; max-width: 780px; color: #66727d; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+    .preset {
+      border: 1px solid #d5dbe0; background: white; color: #26313a;
+      padding: 8px 12px; border-radius: 999px; cursor: pointer; font-weight: 600;
+    }
+    .preset:hover { background: #f1f3f5; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .card {
+      background: white; border: 1px solid #dfe3e7; border-radius: 12px;
+      padding: 18px; box-shadow: 0 2px 8px rgba(20,30,40,.04);
+    }
+    h2 { margin: 0 0 12px; font-size: 17px; }
+    label { display: block; font-size: 13px; color: #66727d; margin-bottom: 7px; }
+    textarea {
+      width: 100%; min-height: 280px; resize: vertical; padding: 13px;
+      border: 1px solid #cfd6dc; border-radius: 8px; background: #fbfcfd;
+      color: #17202a; font: 13px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      outline: none;
+    }
+    #question { min-height: 140px; font-family: inherit; font-size: 14px; }
+    textarea:focus { border-color: #7c8792; box-shadow: 0 0 0 3px rgba(80,95,110,.10); }
+    .actions { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+    .primary {
+      border: 0; background: #17202a; color: white; padding: 10px 17px;
+      border-radius: 8px; cursor: pointer; font-weight: 700;
+    }
+    .primary:hover { background: #2a3540; }
+    .primary:disabled { opacity: .55; cursor: wait; }
+    .status { color: #66727d; font-size: 13px; }
+    .result { margin-top: 18px; }
+    .answer {
+      white-space: pre-wrap; min-height: 90px; line-height: 1.6;
+      background: #fbfcfd; border: 1px solid #e4e8eb; border-radius: 8px; padding: 16px;
+    }
+    .metadata {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+    }
+    .pill {
+      background: #f0f2f4; border: 1px solid #e1e5e8; border-radius: 999px;
+      padding: 6px 10px; font-size: 12px; color: #4f5b66;
+    }
+    .error { color: #9b2c2c; background: #fff5f5; border-color: #f0cccc; }
+    .footer { margin-top: 18px; color: #7a858e; font-size: 12px; }
+    @media(max-width: 820px) { .grid { grid-template-columns: 1fr; } .shell { padding-top: 28px; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">Nugen exercise</div>
+      <h1>FHIR Resource Analyzer</h1>
+      <p class="subtitle">Ask questions about a FHIR resource using a Nugen domain-aligned model with targeted inference-time grounding.</p>
+    </section>
+
+    <div class="toolbar" aria-label="Example resources">
+      <button class="preset" onclick="loadExample('observation')">Blood pressure</button>
+      <button class="preset" onclick="loadExample('allergy')">AllergyIntolerance</button>
+      <button class="preset" onclick="loadExample('medication')">MedicationRequest</button>
+      <button class="preset" onclick="loadExample('priorAuth')">Prior authorization</button>
+    </div>
+
+    <section class="grid">
+      <div class="card">
+        <h2>FHIR resource</h2>
+        <label for="resource">JSON object containing a resourceType</label>
+        <textarea id="resource" spellcheck="false">{
+  "resourceType": "Observation",
+  "status": "final",
+  "code": {
+    "text": "Blood pressure"
+  },
+  "subject": {
+    "reference": "Patient/example"
+  },
+  "encounter": {
+    "reference": "Encounter/example"
+  }
+}</textarea>
+      </div>
+
+      <div class="card">
+        <h2>Question</h2>
+        <label for="question">Natural-language question about the resource</label>
+        <textarea id="question">What does this resource represent, and how is it related to the patient and outpatient encounter?</textarea>
+        <div class="actions">
+          <button id="analyzeButton" class="primary" onclick="analyze()">Analyze</button>
+          <span id="status" class="status">Ready</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card result">
+      <h2>Result</h2>
+      <div id="answer" class="answer">Run an analysis to see the model response.</div>
+      <div id="metadata" class="metadata"></div>
+    </section>
+
+    <div class="footer">The model provides domain reasoning; the API performs boundary validation and does not claim to be a full FHIR validator.</div>
+  </main>
+
+<script>
+const examples = {
+  observation: {
+    resource: {
+      resourceType: "Observation", status: "final",
+      code: {text: "Blood pressure"},
+      subject: {reference: "Patient/example"},
+      encounter: {reference: "Encounter/example"}
+    },
+    question: "What does this resource represent, and how is it related to the patient and outpatient encounter?"
+  },
+  allergy: {
+    resource: {
+      resourceType: "AllergyIntolerance", id: "allergy-1",
+      patient: {reference: "Patient/example"},
+      code: {text: "Penicillin"}, clinicalStatus: {text: "active"}
+    },
+    question: "What does this FHIR resource represent, and what patient is it associated with?"
+  },
+  medication: {
+    resource: {
+      resourceType: "MedicationRequest", id: "medication-request-1",
+      subject: {reference: "Patient/example"},
+      medicationCodeableConcept: {text: "Amoxicillin"},
+      status: "active", intent: "order"
+    },
+    question: "What does this resource represent, and how is MedicationRequest different from medication administration or dispensing?"
+  },
+  priorAuth: {
+    resource: {
+      resourceType: "MedicationRequest", id: "medication-request-1",
+      subject: {reference: "Patient/example"},
+      medicationCodeableConcept: {text: "Specialty medication"},
+      status: "active", intent: "order"
+    },
+    question: "What additional information might be required to determine whether this medication request can proceed through a prior authorization workflow?"
+  }
+};
+
+function loadExample(name) {
+  const example = examples[name];
+  document.getElementById("resource").value = JSON.stringify(example.resource, null, 2);
+  document.getElementById("question").value = example.question;
+  document.getElementById("status").textContent = "Example loaded";
+}
+
+function addPill(text) {
+  const span = document.createElement("span");
+  span.className = "pill";
+  span.textContent = text;
+  return span;
+}
+
+async function analyze() {
+  const status = document.getElementById("status");
+  const answer = document.getElementById("answer");
+  const metadata = document.getElementById("metadata");
+  const button = document.getElementById("analyzeButton");
+  status.textContent = "Calling Nugen...";
+  answer.className = "answer";
+  answer.textContent = "";
+  metadata.replaceChildren();
+  button.disabled = true;
+
+  let resource;
+  try {
+    resource = JSON.parse(document.getElementById("resource").value);
+  } catch (e) {
+    answer.className = "answer error";
+    answer.textContent = "Invalid JSON: " + e.message;
+    status.textContent = "Validation failed";
+    button.disabled = false;
+    return;
+  }
+
+  try {
+    const res = await fetch("/analyze", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({question: document.getElementById("question").value, resource})
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Request failed");
+
+    answer.textContent = data.answer;
+    metadata.appendChild(addPill("Resource: " + data.resource_type));
+    metadata.appendChild(addPill("Latency: " + data.latency_seconds + "s"));
+    metadata.appendChild(addPill("Model: " + data.model_id));
+    data.context_documents.forEach(doc => metadata.appendChild(addPill("Grounding: " + doc)));
+    status.textContent = "Complete";
+  } catch (e) {
+    answer.className = "answer error";
+    answer.textContent = "Error: " + e.message;
+    status.textContent = "Request failed";
+  } finally {
+    button.disabled = false;
+  }
+}
+</script>
+</body>
+</html>

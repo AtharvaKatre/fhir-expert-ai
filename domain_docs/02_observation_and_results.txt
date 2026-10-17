@@ -1,0 +1,50 @@
+FHIR R4 Domain Reference: Observations and Diagnostic Results
+
+Observation
+
+An Observation is used to record measurements and simple assertions
+about a patient, device, or other subject. It is central to clinical
+data because observations support diagnosis, monitoring, establishing
+baselines, and identifying patterns.
+
+Examples include: - Blood pressure - Body temperature - Body weight -
+Heart rate - Laboratory atomic results - Smoking status - Other
+point-in-time clinical measurements
+
+An Observation commonly contains: - status - category - code identifying
+what was observed - subject - encounter - effective date/time - value,
+when available - interpretation - reference ranges - notes
+
+Observation should not normally be used as a substitute for a clinical
+diagnosis. Diagnoses and longer-term clinical problems are generally
+represented using Condition. Likewise, a complete laboratory report with
+clinical context is better represented using DiagnosticReport, which can
+reference individual Observation resources.
+
+DiagnosticReport
+
+DiagnosticReport represents the findings and interpretation of
+diagnostic tests. It may include laboratory, pathology, microbiology,
+hematology, imaging, and other diagnostic information.
+
+A DiagnosticReport can contain: - the status of the report - the
+patient/subject - the encounter - the diagnostic service category -
+references to the request that initiated the investigation - references
+to individual Observations - textual conclusions - coded conclusions -
+references to images or media where applicable
+
+A useful conceptual relationship is:
+
+DiagnosticReport -> summarizes/interprets a diagnostic investigation ->
+may reference one or more Observation resources -> provides a clinical
+conclusion or interpretation
+
+Example reasoning: If a patient has a laboratory result showing a
+measured value, the individual measurement can be represented as an
+Observation. A collection of related results with an overall
+interpretation can be represented as a DiagnosticReport referencing
+those Observations.
+
+Source: HL7 FHIR R4 Observation and DiagnosticReport specifications.
+https://hl7.org/fhir/R4/observation.html
+https://hl7.org/fhir/R4/diagnosticreport.html

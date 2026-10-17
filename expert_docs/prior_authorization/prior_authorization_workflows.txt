@@ -1,0 +1,33 @@
+Prior Authorization and Payer Workflows with HL7 FHIR
+
+Purpose of this reference
+This reference describes how coverage and prior authorization are handled between providers and payers, which FHIR resources and HL7 Da Vinci implementation guides support those workflows, and the main United States regulatory requirements. It is intended to explain workflows and data, not to give legal advice.
+
+What prior authorization is
+Prior authorization is a utilization management process in which a payer requires a provider to obtain approval before a service, procedure, device or medication is delivered, as a condition of coverage. A prior authorization decision is usually approved, denied, partially approved, or pended when more information is needed. Approval of prior authorization is not a guarantee of payment; the later claim is still adjudicated.
+
+Core FHIR resources in payer workflows
+Coverage describes an insurance or payment arrangement for a patient. It identifies the beneficiary, the subscriber, the payor, the coverage period and plan or group information in Coverage.class.
+CoverageEligibilityRequest and CoverageEligibilityResponse ask and answer whether a patient's coverage is active and what benefits apply.
+Claim is used for claims, predeterminations and preauthorizations. Claim.use distinguishes claim, preauthorization and predetermination. A prior authorization request is a Claim with use set to preauthorization.
+ClaimResponse is the payer's answer. ClaimResponse.outcome is queued, complete, error or partial. ClaimResponse.preAuthRef carries the authorization number assigned by the payer. Item-level adjudication explains decisions for individual requested services.
+Questionnaire and QuestionnaireResponse capture documentation that a payer requires, such as clinical criteria for a requested service.
+ServiceRequest, MedicationRequest and DeviceRequest describe the order that triggers the authorization need.
+
+HL7 Da Vinci prior authorization implementation guides
+The Da Vinci project defines three complementary implementation guides, often called the burden reduction guides.
+Coverage Requirements Discovery, CRD, uses CDS Hooks so that a provider's EHR can ask the payer, at the time of ordering or scheduling, whether a service is covered, whether prior authorization is required and whether documentation is needed. Typical hooks include order-select, order-sign, order-dispatch, appointment-book, encounter-start and encounter-discharge. The payer returns CDS cards or system actions.
+Documentation Templates and Rules, DTR, retrieves the payer's documentation requirements as a FHIR Questionnaire, often with Clinical Quality Language logic, pre-populates answers from EHR data and lets the clinician complete the remaining items. The result is a QuestionnaireResponse.
+Prior Authorization Support, PAS, lets the provider submit the authorization request as a FHIR Bundle containing a Claim and supporting resources using the Claim/$submit operation, and check status with Claim/$inquire. The response is a ClaimResponse. A pended request can be completed later, and the provider can be notified of the final decision, for example through a subscription.
+
+Relationship to X12 278
+Under HIPAA, the X12 278 Health Care Services Review transaction is the adopted standard for prior authorization requests and responses between covered entities. The PAS guide was designed to map to the X12 278 so that a FHIR request can be converted to an X12 278 by an intermediary, such as a clearinghouse, where required. Organizations must consider both the FHIR API and the HIPAA transaction requirements.
+
+CMS Interoperability and Prior Authorization Final Rule, CMS-0057-F
+CMS finalized the Interoperability and Prior Authorization rule, CMS-0057-F, in January 2024. It applies to impacted payers: Medicare Advantage organizations, state Medicaid and CHIP fee-for-service programs, Medicaid managed care plans, CHIP managed care entities and issuers of qualified health plans on the Federally-facilitated Exchanges.
+Beginning in January 2026, impacted payers must send prior authorization decisions within 72 hours for expedited requests and within 7 calendar days for standard requests, provide a specific reason when a request is denied, and publicly report prior authorization metrics annually.
+Most API requirements apply beginning in January 2027. They include a Prior Authorization API, a Provider Access API, a Payer-to-Payer API and enhancements to the existing Patient Access API. The Prior Authorization API is expected to identify whether authorization is required, identify documentation requirements, and support sending the request and receiving the response, which aligns with the CRD, DTR and PAS guides.
+The rule's prior authorization requirements exclude drugs, so pharmacy benefit drug authorizations follow other processes.
+
+Interpreting a prior authorization question
+First identify the requested item from ServiceRequest, MedicationRequest or DeviceRequest and the Coverage that applies. Then determine whether authorization is required, which documentation is needed, how the request is submitted and how the decision is returned. Cite the relevant resource elements, such as Claim.use, ClaimResponse.outcome and ClaimResponse.preAuthRef. When payer-specific rules are not given, say that coverage criteria vary by payer and plan instead of guessing.

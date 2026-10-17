@@ -1,0 +1,24 @@
+{
+  "baseline": {
+    "correct": 4,
+    "partial": 5,
+    "incorrect": 6,
+    "strict_accuracy": 0.2667,
+    "partial_credit": 0.4333,
+    "average_latency_seconds": 2.734
+  },
+  "grounded": {
+    "correct": 9,
+    "partial": 4,
+    "incorrect": 2,
+    "strict_accuracy": 0.6,
+    "partial_credit": 0.7333,
+    "average_latency_seconds": 1.573
+  },
+  "improvement": {
+    "strict_accuracy_points": 33.33,
+    "incorrect_answers_reduced": 4,
+    "latency_reduction_seconds": 1.161,
+    "latency_reduction_percent": 42.5
+  }
+}

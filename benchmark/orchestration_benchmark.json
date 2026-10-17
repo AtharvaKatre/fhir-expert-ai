@@ -1,0 +1,485 @@
+[
+  {
+    "id": "fhir-01",
+    "question": "What is the primary purpose of the FHIR Patient resource?",
+    "expected_experts": [
+      "fhir_structure"
+    ],
+    "key_points": [
+      [
+        "demographic"
+      ],
+      [
+        "administrative"
+      ]
+    ],
+    "reference_answer": "The Patient resource holds demographic and administrative information about a person receiving care, such as identifiers, name, gender, birth date and contact details. It is the 'who' that other clinical resources reference."
+  },
+  {
+    "id": "fhir-02",
+    "question": "A blood pressure was recorded during an outpatient visit. Which FHIR resources represent the patient, the visit and the measurement, and how are they linked?",
+    "expected_experts": [
+      "fhir_structure"
+    ],
+    "key_points": [
+      [
+        "Patient"
+      ],
+      [
+        "Encounter"
+      ],
+      [
+        "Observation"
+      ],
+      [
+        "subject"
+      ],
+      [
+        "encounter"
+      ]
+    ],
+    "reference_answer": "The person is a Patient, the outpatient visit is an Encounter, and the blood pressure is an Observation. The Observation references the Patient through Observation.subject and the visit through Observation.encounter; the Encounter references the Patient through Encounter.subject."
+  },
+  {
+    "id": "fhir-03",
+    "question": "What is the difference between a DiagnosticReport and an Observation?",
+    "expected_experts": [
+      "fhir_structure",
+      "clinical_terminology"
+    ],
+    "key_points": [
+      [
+        "DiagnosticReport"
+      ],
+      [
+        "Observation"
+      ],
+      [
+        "result",
+        "reference"
+      ],
+      [
+        "interpretation",
+        "conclusion",
+        "findings"
+      ]
+    ],
+    "reference_answer": "An Observation is a single measurement or finding. A DiagnosticReport represents the overall report of a diagnostic investigation, including the clinical interpretation or conclusion, and references its individual Observation resources through DiagnosticReport.result."
+  },
+  {
+    "id": "fhir-04",
+    "question": "How should a Practitioner and the Organization they work for be related in FHIR?",
+    "expected_experts": [
+      "fhir_structure"
+    ],
+    "key_points": [
+      [
+        "PractitionerRole"
+      ],
+      [
+        "Organization"
+      ],
+      [
+        "Practitioner"
+      ]
+    ],
+    "reference_answer": "Use PractitionerRole: it references the Practitioner and the Organization and describes the role, specialty and locations of that practitioner at that organization. Practitioner itself does not carry the employing organization."
+  },
+  {
+    "id": "clin-01",
+    "question": "What do the LOINC codes and units in this resource mean, and is the result complete?",
+    "resource": {
+      "resourceType": "Observation",
+      "status": "final",
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+              "code": "vital-signs"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "85354-9",
+            "display": "Blood pressure panel"
+          }
+        ]
+      },
+      "component": [
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://loinc.org",
+                "code": "8480-6"
+              }
+            ]
+          },
+          "valueQuantity": {
+            "value": 142,
+            "unit": "mmHg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mm[Hg]"
+          }
+        },
+        {
+          "code": {
+            "coding": [
+              {
+                "system": "http://loinc.org",
+                "code": "8462-4"
+              }
+            ]
+          },
+          "valueQuantity": {
+            "value": 91,
+            "unit": "mmHg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mm[Hg]"
+          }
+        }
+      ]
+    },
+    "expected_experts": [
+      "clinical_terminology"
+    ],
+    "key_points": [
+      [
+        "systolic"
+      ],
+      [
+        "diastolic"
+      ],
+      [
+        "mm[Hg]",
+        "mmHg",
+        "millimet"
+      ],
+      [
+        "final"
+      ],
+      [
+        "component"
+      ]
+    ],
+    "reference_answer": "This is a final vital-signs Observation using the LOINC blood pressure panel 85354-9. It has two components: systolic blood pressure 8480-6 with 142 mm[Hg] and diastolic blood pressure 8462-4 with 91 mm[Hg], with units coded in UCUM. Status final means the result is complete."
+  },
+  {
+    "id": "clin-02",
+    "question": "Is this condition a current confirmed diagnosis, and what code systems are used?",
+    "resource": {
+      "resourceType": "Condition",
+      "clinicalStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+            "code": "active"
+          }
+        ]
+      },
+      "verificationStatus": {
+        "coding": [
+          {
+            "system": "http://terminology.hl7.org/CodeSystem/condition-ver-status",
+            "code": "confirmed"
+          }
+        ]
+      },
+      "code": {
+        "coding": [
+          {
+            "system": "http://snomed.info/sct",
+            "code": "44054006",
+            "display": "Diabetes mellitus type 2"
+          },
+          {
+            "system": "http://hl7.org/fhir/sid/icd-10-cm",
+            "code": "E11.9"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/example"
+      }
+    },
+    "expected_experts": [
+      "clinical_terminology"
+    ],
+    "key_points": [
+      [
+        "active"
+      ],
+      [
+        "confirmed"
+      ],
+      [
+        "SNOMED"
+      ],
+      [
+        "ICD-10"
+      ],
+      [
+        "type 2 diabetes",
+        "diabetes mellitus type 2"
+      ]
+    ],
+    "reference_answer": "The Condition is active (clinicalStatus) and confirmed (verificationStatus), so it is a current confirmed diagnosis. It is coded with SNOMED CT 44054006 (diabetes mellitus type 2) and ICD-10-CM E11.9 (type 2 diabetes mellitus without complications)."
+  },
+  {
+    "id": "clin-03",
+    "question": "What is the difference between criticality and reaction severity in an AllergyIntolerance?",
+    "expected_experts": [
+      "clinical_terminology"
+    ],
+    "key_points": [
+      [
+        "criticality"
+      ],
+      [
+        "severity"
+      ],
+      [
+        "future",
+        "potential"
+      ],
+      [
+        "past",
+        "specific reaction"
+      ]
+    ],
+    "reference_answer": "Criticality describes the potential for a future serious or life-threatening reaction (low, high, unable-to-assess). Reaction severity describes how severe a specific past reaction was (mild, moderate, severe). They are different concepts."
+  },
+  {
+    "id": "clin-04",
+    "question": "How do MedicationRequest, MedicationStatement and MedicationAdministration differ?",
+    "expected_experts": [
+      "clinical_terminology",
+      "fhir_structure"
+    ],
+    "key_points": [
+      [
+        "order",
+        "prescription"
+      ],
+      [
+        "reported",
+        "taking"
+      ],
+      [
+        "administ"
+      ]
+    ],
+    "reference_answer": "MedicationRequest is an order or prescription for a medication. MedicationStatement records that the patient is taking or has taken a medication, often as reported. MedicationAdministration records an actual administration event."
+  },
+  {
+    "id": "clin-05",
+    "question": "This lab Observation has status entered-in-error. Can it be used to interpret the patient's glucose?",
+    "resource": {
+      "resourceType": "Observation",
+      "status": "entered-in-error",
+      "category": [
+        {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/observation-category",
+              "code": "laboratory"
+            }
+          ]
+        }
+      ],
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2345-7",
+            "display": "Glucose [Mass/volume] in Serum or Plasma"
+          }
+        ]
+      },
+      "valueQuantity": {
+        "value": 182,
+        "unit": "mg/dL",
+        "system": "http://unitsofmeasure.org",
+        "code": "mg/dL"
+      }
+    },
+    "expected_experts": [
+      "clinical_terminology"
+    ],
+    "key_points": [
+      [
+        "entered-in-error",
+        "entered in error"
+      ],
+      [
+        "not be used",
+        "should not",
+        "ignore",
+        "must not",
+        "cannot"
+      ]
+    ],
+    "reference_answer": "No. An Observation with status entered-in-error was recorded by mistake and must not be used for clinical interpretation, so the 182 mg/dL glucose value should be ignored."
+  },
+  {
+    "id": "pa-01",
+    "question": "Which Da Vinci implementation guides support prior authorization and what does each one do?",
+    "expected_experts": [
+      "prior_authorization"
+    ],
+    "key_points": [
+      [
+        "CRD",
+        "Coverage Requirements Discovery"
+      ],
+      [
+        "DTR",
+        "Documentation Templates"
+      ],
+      [
+        "PAS",
+        "Prior Authorization Support"
+      ],
+      [
+        "CDS Hooks"
+      ],
+      [
+        "Questionnaire"
+      ]
+    ],
+    "reference_answer": "Three Da Vinci guides support prior authorization: Coverage Requirements Discovery (CRD) uses CDS Hooks to tell the provider at ordering time whether authorization or documentation is required; Documentation Templates and Rules (DTR) collects the required documentation using a FHIR Questionnaire and QuestionnaireResponse; Prior Authorization Support (PAS) submits the request as a Claim bundle and returns a ClaimResponse."
+  },
+  {
+    "id": "pa-02",
+    "question": "How is a prior authorization request represented in FHIR and how is the payer decision returned?",
+    "expected_experts": [
+      "prior_authorization",
+      "fhir_structure"
+    ],
+    "key_points": [
+      [
+        "Claim"
+      ],
+      [
+        "preauthorization"
+      ],
+      [
+        "ClaimResponse"
+      ],
+      [
+        "preAuthRef",
+        "authorization number"
+      ]
+    ],
+    "reference_answer": "A prior authorization request is a Claim with Claim.use set to preauthorization, submitted in a Bundle with supporting resources (PAS Claim/$submit). The payer decision is returned as a ClaimResponse, whose outcome and item adjudication describe the decision and whose preAuthRef carries the authorization number."
+  },
+  {
+    "id": "pa-03",
+    "question": "Under CMS-0057-F, how quickly must impacted payers decide expedited and standard prior authorization requests?",
+    "expected_experts": [
+      "prior_authorization"
+    ],
+    "key_points": [
+      [
+        "72 hours"
+      ],
+      [
+        "7 calendar days",
+        "seven calendar days",
+        "7 days"
+      ]
+    ],
+    "reference_answer": "Starting in January 2026, impacted payers must decide expedited prior authorization requests within 72 hours and standard requests within 7 calendar days."
+  },
+  {
+    "id": "pa-04",
+    "question": "What is the relationship between the FHIR PAS guide and the X12 278 transaction?",
+    "expected_experts": [
+      "prior_authorization"
+    ],
+    "key_points": [
+      [
+        "X12 278",
+        "278"
+      ],
+      [
+        "HIPAA"
+      ],
+      [
+        "intermediary",
+        "clearinghouse"
+      ],
+      [
+        "map",
+        "convert"
+      ]
+    ],
+    "reference_answer": "Under HIPAA, X12 278 is the adopted standard for prior authorization transactions. The FHIR PAS guide maps to the X12 278 so that an intermediary such as a clearinghouse can convert the FHIR request into an X12 278 where required."
+  },
+  {
+    "id": "multi-01",
+    "question": "A clinician orders an MRI. Which FHIR resource represents the order, and how would the EHR discover whether prior authorization is required?",
+    "expected_experts": [
+      "fhir_structure",
+      "prior_authorization"
+    ],
+    "key_points": [
+      [
+        "ServiceRequest"
+      ],
+      [
+        "CRD",
+        "Coverage Requirements Discovery"
+      ],
+      [
+        "CDS Hooks",
+        "order-sign",
+        "order-select"
+      ]
+    ],
+    "reference_answer": "The MRI order is a ServiceRequest. The EHR discovers whether prior authorization is required through Da Vinci Coverage Requirements Discovery (CRD), which calls the payer using CDS Hooks such as order-select or order-sign and returns coverage and documentation requirements."
+  },
+  {
+    "id": "multi-02",
+    "question": "For this medication order, which code system identifies the drug and what payer process might apply before it is dispensed?",
+    "resource": {
+      "resourceType": "MedicationRequest",
+      "status": "active",
+      "intent": "order",
+      "medicationCodeableConcept": {
+        "coding": [
+          {
+            "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+            "code": "000000",
+            "display": "Example specialty drug"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/example"
+      }
+    },
+    "expected_experts": [
+      "clinical_terminology",
+      "prior_authorization"
+    ],
+    "key_points": [
+      [
+        "RxNorm"
+      ],
+      [
+        "prior authorization"
+      ],
+      [
+        "payer",
+        "plan"
+      ]
+    ],
+    "reference_answer": "The drug is identified with RxNorm (system http://www.nlm.nih.gov/research/umls/rxnorm). Depending on the patient's payer and plan, prior authorization may be required before dispensing; note that the CMS-0057-F prior authorization requirements exclude drugs, so pharmacy benefit processes apply."
+  }
+]

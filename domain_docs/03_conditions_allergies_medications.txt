@@ -1,0 +1,56 @@
+FHIR R4 Domain Reference: Conditions, Allergies and Medications
+
+Condition
+
+Condition records a clinical condition, problem, diagnosis, or other
+health concern that has become relevant to a patient’s care. A Condition
+can represent a diagnosis, a problem on a practitioner’s problem list,
+or a concern requiring investigation or management.
+
+Conditions are often connected to other resources. For example, a
+Condition may be referenced as the reason for a MedicationRequest or
+Procedure.
+
+Observation vs Condition: A symptom or measurement that contributes to
+establishing a diagnosis may be represented as an Observation. A
+persistent problem, diagnosis, or clinical concern being tracked or
+managed is generally represented as a Condition.
+
+AllergyIntolerance
+
+AllergyIntolerance records an individual’s propensity or risk of an
+adverse reaction to a substance. It can represent allergies or
+intolerances involving medications, foods, environmental substances,
+biologic products, or other substances.
+
+Important fields include: - clinicalStatus: for example active,
+inactive, or resolved - verificationStatus: for example unconfirmed,
+confirmed, refuted, or entered-in-error - type: allergy or intolerance -
+category: food, medication, environment, or biologic - criticality: low,
+high, or unable-to-assess - code identifying the substance or concept -
+patient - reaction details
+
+AllergyIntolerance is useful for clinical decision support and alerts
+because an individual’s known allergies or intolerances can affect
+treatment decisions.
+
+MedicationRequest
+
+MedicationRequest represents an order or request for medication and the
+instructions for administration. It can be used for inpatient and
+outpatient medication orders and can include the reason for the request.
+
+MedicationRequest should be distinguished from: - MedicationDispense:
+provision of medication supply - MedicationAdministration: an actual
+administration of medication - MedicationStatement: a record that a
+patient is taking or has taken a medication, including information
+reported by a patient or clinician
+
+A medication workflow can therefore be understood as: request/order ->
+dispense -> administer while MedicationStatement records an assertion
+about medication use.
+
+Source: HL7 FHIR R4 Condition, AllergyIntolerance and MedicationRequest
+specifications. https://hl7.org/fhir/R4/condition.html
+https://hl7.org/fhir/R4/allergyintolerance.html
+https://hl7.org/fhir/R4/medicationrequest.html

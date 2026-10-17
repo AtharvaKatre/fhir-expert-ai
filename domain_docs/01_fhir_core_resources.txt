@@ -1,0 +1,48 @@
+FHIR R4 Healthcare Data Domain: Core Resources
+
+This document is a compact domain reference for HL7 FHIR R4 healthcare
+data exchange.
+
+Patient The Patient resource represents demographic and administrative
+information about an individual receiving healthcare or other
+health-related services. It is focused on the “who” of a healthcare
+interaction. Common elements include identifiers, active status, name,
+telecom information, gender, birth date, address, communication
+preferences, and references to organizations or practitioners involved
+in care.
+
+Observation Observation represents measurements and simple assertions
+about a patient, device, or other subject. Typical examples include
+vital signs, laboratory results, body weight, height, and smoking
+status. Observation is generally intended for point-in-time measurements
+or findings rather than a diagnosis.
+
+Condition Condition represents a clinical condition, problem, diagnosis,
+or health concern that has reached a level of importance for clinical
+tracking or management. It can represent a diagnosed disease, a
+problem-list item, or a clinical concern.
+
+MedicationRequest MedicationRequest represents an order or request for
+medication and instructions for administration. It is used for
+prescribing/requesting medication and is distinct from
+MedicationStatement, which records medication use or a reported history
+of taking a medication.
+
+Encounter Encounter represents an interaction between a patient and
+healthcare provider(s) for providing healthcare services or assessing
+health status. Encounters can occur in ambulatory, emergency, inpatient,
+home-health, or virtual settings.
+
+DiagnosticReport DiagnosticReport represents findings and interpretation
+from diagnostic investigations. It can include clinical context, coded
+or textual conclusions, references to individual Observations, and other
+supporting information.
+
+Important modeling distinction: - Patient describes who receives care. -
+Encounter describes the healthcare interaction. - Observation describes
+a measurement or simple finding. - Condition describes a diagnosis,
+problem, or clinical concern. - MedicationRequest describes a medication
+order/request. - DiagnosticReport describes a diagnostic investigation
+and its interpretation.
+
+Source: HL7 FHIR R4 specification, https://hl7.org/fhir/R4/

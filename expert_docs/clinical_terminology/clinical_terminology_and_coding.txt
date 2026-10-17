@@ -1,0 +1,40 @@
+Clinical Data Semantics and Terminology in HL7 FHIR R4
+
+Purpose of this reference
+This reference explains how clinical meaning is carried inside FHIR R4 resources. It covers coded data types, the main terminology systems, the status elements that change how a resource must be interpreted, and the units and ranges attached to measurements. It is intended for interpreting data, not for making diagnoses or treatment decisions.
+
+CodeableConcept and Coding
+Most clinical meaning in FHIR is carried by the CodeableConcept data type. A CodeableConcept contains an optional text element and a list of Coding entries. Each Coding has a system, which is a URI identifying the code system, a code, and a human-readable display. Several Codings can describe the same concept in different terminologies, for example a local laboratory code together with a LOINC code. Software should match on system and code, not on display text, because display text can vary between implementations.
+
+Common code systems and their FHIR system URIs
+LOINC, system http://loinc.org, identifies laboratory tests, clinical measurements, vital signs, survey questions and document types. Observation.code commonly uses LOINC.
+SNOMED CT, system http://snomed.info/sct, is a broad clinical terminology used for problems, findings, procedures, body sites, allergy substances and many value sets. Condition.code often uses SNOMED CT.
+ICD-10-CM, system http://hl7.org/fhir/sid/icd-10-cm, is the United States diagnosis classification used for billing and reporting. A Condition may carry an ICD-10-CM code alongside a SNOMED CT code.
+RxNorm, system http://www.nlm.nih.gov/research/umls/rxnorm, identifies clinical drugs and ingredients in the United States and is used in Medication, MedicationRequest and MedicationStatement.
+UCUM, system http://unitsofmeasure.org, is the Unified Code for Units of Measure and is used in Quantity values. Examples are mm[Hg] for millimetres of mercury, kg for kilograms, /min for a rate per minute, mg/dL for milligrams per decilitre and % for percent.
+
+Well-known LOINC codes for vital signs and common results
+Blood pressure panel: 85354-9. Systolic blood pressure: 8480-6. Diastolic blood pressure: 8462-4. Heart rate: 8867-4. Body temperature: 8310-5. Body weight: 29463-7. Hemoglobin A1c in blood: 4548-4. Glucose in serum or plasma: 2345-7.
+A blood pressure measurement is normally a single Observation with the panel code 85354-9 and two components: systolic 8480-6 and diastolic 8462-4, each with a valueQuantity in mm[Hg]. The components are not separate resources.
+
+Observation semantics
+Observation.status values are registered, preliminary, final, amended, corrected, cancelled, entered-in-error and unknown. Only final, amended and corrected results should normally be treated as complete. An entered-in-error Observation must be ignored for clinical interpretation.
+Observation.category classifies the observation, using codes such as vital-signs, laboratory, social-history, imaging, survey and exam from the system http://terminology.hl7.org/CodeSystem/observation-category.
+The result is carried in value[x], most often valueQuantity with value, unit, system and code. valueCodeableConcept is used for coded results and valueString for free text.
+Observation.interpretation flags the result relative to normal, using codes from the v3 ObservationInterpretation code system such as N for normal, H for high, L for low, HH for critically high, LL for critically low and A for abnormal.
+Observation.referenceRange gives low and high bounds, and may be restricted by age or other criteria. Comparing a value to its reference range is a data interpretation, not a diagnosis.
+
+Condition semantics
+Condition.clinicalStatus uses active, recurrence, relapse, inactive, remission and resolved. Condition.verificationStatus uses unconfirmed, provisional, differential, confirmed, refuted and entered-in-error. A refuted or entered-in-error Condition must not be treated as a current diagnosis.
+Condition.category distinguishes problem-list-item, a longer-lived problem, from encounter-diagnosis, a diagnosis made in the context of a specific encounter.
+Examples: essential hypertension is SNOMED CT 59621000 and ICD-10-CM I10. Type 2 diabetes mellitus is SNOMED CT 44054006, and ICD-10-CM E11.9 is type 2 diabetes mellitus without complications.
+
+AllergyIntolerance semantics
+AllergyIntolerance.clinicalStatus uses active, inactive and resolved. AllergyIntolerance.type is allergy or intolerance. AllergyIntolerance.category is food, medication, environment or biologic. AllergyIntolerance.criticality is low, high or unable-to-assess and describes the potential for a future serious reaction. AllergyIntolerance.reaction records manifestations and a severity of mild, moderate or severe for a specific past reaction. Criticality and reaction severity are different concepts.
+
+Medication semantics
+MedicationRequest represents an order or proposal to supply and administer a medication. Its status includes active, on-hold, cancelled, completed, entered-in-error, stopped, draft and unknown. MedicationRequest.intent distinguishes proposal, plan, order, original-order, reflex-order, filler-order, instance-order and option. The drug is given by medicationCodeableConcept, often RxNorm, or by a reference to a Medication resource. dosageInstruction holds the dose, route, timing and as-needed information. dispenseRequest describes the quantity, number of refills and supply duration.
+MedicationStatement records that a patient is taking, has taken or will take a medication, often as reported by the patient. MedicationDispense records the supply of a medication by a pharmacy. MedicationAdministration records an actual administration event.
+
+Safe interpretation rules
+Always check status before interpreting clinical data. Report units exactly as given. Distinguish measurements (Observation) from diagnoses (Condition). Never infer a diagnosis from a single value. State clearly when a code system or code is not recognised instead of guessing.

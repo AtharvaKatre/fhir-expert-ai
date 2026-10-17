@@ -1,0 +1,16 @@
+{
+  "question": "What does this resource represent, and how is it related to the patient and outpatient encounter?",
+  "resource": {
+    "resourceType": "Observation",
+    "status": "final",
+    "code": {
+      "text": "Blood pressure"
+    },
+    "subject": {
+      "reference": "Patient/example"
+    },
+    "encounter": {
+      "reference": "Encounter/example"
+    }
+  }
+}

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>FHIR Expert Panel</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 40px auto; padding: 0 16px; line-height: 1.5; color: #1d1d1f; background: #fff; }
+    textarea, input[type=text] { width: 100%; box-sizing: border-box; font: inherit; padding: 10px; border: 1px solid #bbb; border-radius: 6px; }
+    textarea { min-height: 180px; font-family: ui-monospace, monospace; font-size: 13px; }
+    #question { font-family: inherit; font-size: inherit; min-height: 110px; }
+    button { padding: 9px 16px; border: 1px solid #1f5fbf; background: #1f5fbf; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 600; }
+    button.secondary { background: #fff; color: #1f5fbf; }
+    button:disabled { opacity: .5; cursor: default; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .experts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-top: 20px; }
+    .card h2 { margin-top: 0; font-size: 1.15rem; }
+    .expert { border: 1px solid #ddd; border-radius: 8px; padding: 12px; font-size: 14px; }
+    .expert pre, .answer { white-space: pre-wrap; margin: 0; font-family: inherit; }
+    .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; background: #eee; }
+    .ok { background: #dff3e4; color: #145c2c; } .bad { background: #fde2e1; color: #8a1c17; } .warn { background: #fff2cc; color: #6b5200; }
+    .muted { color: #666; font-size: 14px; }
+    label { margin-right: 14px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } body { margin-top: 20px; } }
+  </style>
+</head>
+<body>
+  <h1>FHIR Expert Panel</h1>
+  <p class="muted">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop. Do not enter real patient data.</p>
+
+  <div class="grid">
+    <div>
+      <h2>Question</h2>
+      <textarea id="question">This MRI order needs payer approval. Which FHIR resources represent the order, and how would the EHR find out whether prior authorization is required?</textarea>
+      <p class="muted">Experts: <label><input type="checkbox" id="auto" checked> let the router decide</label></p>
+      <div id="manual" class="muted" hidden></div>
+      <p><button id="run" onclick="run()">Ask the panel</button> <span id="status" class="muted"></span></p>
+    </div>
+    <div>
+      <h2>FHIR resource (optional)</h2>
+      <textarea id="resource">{
+  "resourceType": "ServiceRequest",
+  "status": "active",
+  "intent": "order",
+  "code": { "text": "MRI lumbar spine without contrast" },
+  "subject": { "reference": "Patient/example" },
+  "encounter": { "reference": "Encounter/example" }
+}</textarea>
+    </div>
+  </div>
+
+  <div class="card" id="result" hidden>
+    <h2>Answer</h2>
+    <div class="answer" id="answer"></div>
+    <p class="muted" id="meta"></p>
+    <h2>Route</h2>
+    <p class="muted" id="route"></p>
+    <h2>Expert outputs</h2>
+    <div class="experts" id="experts"></div>
+  </div>
+
+  <div class="card" id="feedback" hidden>
+    <h2>Feedback</h2>
+    <p>
+      <button class="secondary" onclick="setRating('up')" id="up">👍 Helpful</button>
+      <button class="secondary" onclick="setRating('down')" id="down">👎 Not helpful</button>
+    </p>
+    <p class="muted">Which experts should have answered? (optional)</p>
+    <div id="fbExperts" class="muted"></div>
+    <p class="muted">Key points the answer should contain, comma-separated (optional)</p>
+    <input type="text" id="fbKeyPoints" placeholder="e.g. ClaimResponse, preAuthRef">
+    <p class="muted">Comment (optional)</p>
+    <input type="text" id="fbComment">
+    <p><button onclick="sendFeedback()">Submit feedback</button> <span id="fbStatus" class="muted"></span></p>
+  </div>
+
+<script>
+let experts = [], lastTrace = null, rating = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function checkboxes(prefix) {
+  return experts.map(e => `<label><input type="checkbox" class="${prefix}" value="${e.key}"> ${esc(e.name)}${e.configured ? "" : " (not configured)"}</label>`).join("");
+}
+async function init() {
+  const data = await (await fetch("/experts")).json();
+  experts = data.experts;
+  $("manual").innerHTML = checkboxes("pick");
+  $("fbExperts").innerHTML = checkboxes("fb");
+}
+$("auto").onchange = () => { $("manual").hidden = $("auto").checked; };
+
+async function run() {
+  let resource = null;
+  const raw = $("resource").value.trim();
+  if (raw) {
+    try { resource = JSON.parse(raw); } catch (e) { $("status").textContent = "Invalid JSON: " + e.message; return; }
+  }
+  const body = { question: $("question").value, resource };
+  if (!$("auto").checked) {
+    body.experts = [...document.querySelectorAll(".pick:checked")].map(c => c.value);
+    if (!body.experts.length) { $("status").textContent = "Pick at least one expert."; return; }
+  }
+  $("run").disabled = true; $("status").textContent = "Routing and calling experts…";
+  try {
+    const res = await fetch("/orchestrate", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body) });
+    const data = await res.json();
+    if (!res.ok) {
+      const trace = data.detail && data.detail.trace;
+      if (trace) { render(trace, true); }
+      throw new Error(typeof data.detail === "string" ? data.detail : (data.detail.message || JSON.stringify(data.detail)));
+    }
+    render(data, false);
+    $("status").textContent = data.degraded ? "Done (degraded: see details below)" : "Done";
+  } catch (e) {
+    $("status").textContent = "Error: " + e.message;
+  } finally { $("run").disabled = false; }
+}
+
+function render(t, failed) {
+  lastTrace = t; rating = null; $("fbStatus").textContent = "";
+  document.querySelectorAll(".fb").forEach(c => c.checked = false);
+  $("result").hidden = false; $("feedback").hidden = false;
+  $("answer").textContent = failed ? "All selected experts failed." : t.answer;
+  const s = t.synthesis || {};
+  $("meta").textContent = `Synthesis: ${s.method || "n/a"}${s.error ? " (" + s.error.slice(0, 120) + ")" : ""} · total ${t.total_latency_seconds}s` + (t.mock ? " · MOCK MODE" : "");
+  const r = t.route;
+  $("route").innerHTML = `<span class="badge ${r.method === "keyword_fallback" ? "warn" : "ok"}">${esc(r.method)}</span> ` +
+    esc(r.experts.join(", ")) + (r.reason ? ` · ${esc(r.reason)}` : "") + (r.error ? ` · router error: ${esc(r.error.slice(0, 160))}` : "");
+  $("experts").innerHTML = t.experts.map(e => `
+    <div class="expert">
+      <strong>${esc(e.name)}</strong> <span class="badge ${e.status === "ok" ? "ok" : "bad"}">${esc(e.status)}</span><br>
+      <span class="muted">${esc(e.model_id || "no model id")}${e.latency_seconds != null ? " · " + e.latency_seconds + "s" : ""}${e.confidence != null ? " · confidence " + Math.round(e.confidence) : ""}</span>
+      <pre>${esc(e.status === "ok" ? e.answer : e.error)}</pre>
+    </div>`).join("");
+}
+
+function setRating(r) {
+  rating = r;
+  $("up").className = r === "up" ? "" : "secondary";
+  $("down").className = r === "down" ? "" : "secondary";
+}
+
+async function sendFeedback() {
+  if (!lastTrace || !rating) { $("fbStatus").textContent = "Choose 👍 or 👎 first."; return; }
+  const expected = [...document.querySelectorAll(".fb:checked")].map(c => c.value);
+  const keyPoints = $("fbKeyPoints").value.split(",").map(s => s.trim()).filter(Boolean);
+  const body = { trace_id: lastTrace.trace_id, rating, comment: $("fbComment").value || null,
+                 expected_experts: expected.length ? expected : null,
+                 expected_key_points: keyPoints.length ? keyPoints : null };
+  const res = await fetch("/feedback", { method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body) });
+  $("fbStatus").textContent = res.ok ? "Thanks, feedback recorded." : "Could not record feedback.";
+}
+init();
+</script>
+</body>
+</html>

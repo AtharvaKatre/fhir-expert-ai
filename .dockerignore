@@ -1,0 +1,10 @@
+.env
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.zip
+data/feedback.jsonl
+data/provision_state.json
+.git/

@@ -1,0 +1,48 @@
+FHIR R4 Domain Reference: Patient and Encounter Workflow
+
+Patient
+
+The Patient resource contains demographic and administrative information
+about an individual receiving healthcare services. It is the central
+“who” resource for many clinical records.
+
+A patient may have records in multiple healthcare organizations. Patient
+information can therefore be linked to encounters, observations,
+conditions, medications, diagnostic reports, procedures, claims, and
+many other resources.
+
+Encounter
+
+Encounter represents an interaction between a patient and one or more
+healthcare providers for the purpose of providing healthcare services or
+assessing health status.
+
+Encounter can cover different settings: - ambulatory/outpatient -
+emergency - inpatient - home health - virtual care
+
+An encounter represents a lifecycle rather than only a single timestamp.
+Depending on the setting, it can include pre-admission, admission, the
+interaction itself, a stay, and discharge.
+
+Relationships
+
+A simplified clinical data relationship can look like:
+
+Patient | +– Encounter | | | +– Observation | +– DiagnosticReport | +–
+Condition | +– MedicationRequest | +– AllergyIntolerance +–
+MedicationStatement
+
+The Encounter provides context for many events. For example, an
+Observation can identify the encounter during which a measurement was
+taken, while a DiagnosticReport can identify the encounter associated
+with the diagnostic investigation.
+
+Important reasoning rule: Do not treat every piece of clinical
+information as an Observation. FHIR separates resources according to
+their meaning and workflow role. A measurement belongs naturally in
+Observation, a diagnosis/problem in Condition, an interaction in
+Encounter, and an individual’s allergy risk in AllergyIntolerance.
+
+Source: HL7 FHIR R4 Patient and Encounter specifications.
+https://hl7.org/fhir/R4/patient.html
+https://hl7.org/fhir/R4/encounter.html

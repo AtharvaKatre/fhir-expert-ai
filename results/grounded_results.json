@@ -1,0 +1,738 @@
+{
+  "summary": {
+    "experiment": "aligned_model_with_domain_grounding",
+    "model_id": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+    "question_count": 15,
+    "successful_requests": 15,
+    "failed_requests": 0,
+    "total_time_seconds": 23.63,
+    "average_latency_seconds": 1.573
+  },
+  "results": [
+    {
+      "id": 1,
+      "question": "What is the primary purpose of the FHIR Patient resource?",
+      "expected_answer": "The Patient resource represents demographic and administrative information about an individual receiving healthcare or other health-related services. It is focused on the 'who' of a healthcare interaction.",
+      "source_documents": [
+        "01_fhir_core_resources.txt"
+      ],
+      "model_answer": "The primary purpose of the Patient resource is to represent demographic and administrative information about an individual receiving healthcare or other health-related services.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.326,
+      "usage": {
+        "completion_tokens": 26,
+        "prompt_tokens": 580,
+        "total_tokens": 606,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687921",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "The primary purpose of the Patient resource is to represent demographic and administrative information about an individual receiving healthcare or other health-related services."
+          }
+        ],
+        "created": 1788687921,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 26,
+          "prompt_tokens": 580,
+          "total_tokens": 606,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.64212541654706,
+          "throughput_tokens_per_second": 40.490532425599,
+          "total_seconds": 0.64212541654706
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 2,
+      "question": "What is an Observation resource used for in FHIR?",
+      "expected_answer": "Observation is used to record measurements and simple assertions about a patient, device, or other subject. Examples include vital signs, laboratory results, body weight, heart rate, and smoking status.",
+      "source_documents": [
+        "01_fhir_core_resources.txt",
+        "02_observation_and_results.txt"
+      ],
+      "model_answer": "Observation represents measurements and simple assertions about a patient, device, or other subject.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.188,
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 995,
+        "total_tokens": 1013,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687923",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Observation represents measurements and simple assertions about a patient, device, or other subject."
+          }
+        ],
+        "created": 1788687923,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 995,
+          "total_tokens": 1013,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.4874518271535635,
+          "throughput_tokens_per_second": 36.92672587793871,
+          "total_seconds": 0.4874518271535635
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 3,
+      "question": "What is the difference between an Observation and a Condition in FHIR?",
+      "expected_answer": "An Observation generally represents a measurement or simple finding, while a Condition represents a clinical condition, problem, diagnosis, or health concern that is being tracked or managed.",
+      "source_documents": [
+        "01_fhir_core_resources.txt",
+        "02_observation_and_results.txt"
+      ],
+      "model_answer": "Observation represents measurements and simple assertions about a patient, device, or other subject, while Condition represents a clinical condition, problem, diagnosis, or health concern that has reached a level of importance for clinical tracking or management.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.6,
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 998,
+        "total_tokens": 1043,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687924",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Observation represents measurements and simple assertions about a patient, device, or other subject, while Condition represents a clinical condition, problem, diagnosis, or health concern that has reached a level of importance for clinical tracking or management."
+          }
+        ],
+        "created": 1788687924,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 45,
+          "prompt_tokens": 998,
+          "total_tokens": 1043,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 1.0682558957487345,
+          "throughput_tokens_per_second": 42.124738257081894,
+          "total_seconds": 1.0682558957487345
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 4,
+      "question": "What is the role of a DiagnosticReport compared with an Observation?",
+      "expected_answer": "A DiagnosticReport represents the findings and interpretation of a diagnostic investigation. It can reference one or more Observation resources, which represent individual measurements or results.",
+      "source_documents": [
+        "01_fhir_core_resources.txt",
+        "02_observation_and_results.txt"
+      ],
+      "model_answer": "DiagnosticReport represents the findings and interpretation of diagnostic tests, summarizing a diagnostic investigation.",
+      "finish_reason": "stop",
+      "latency_seconds": 0.983,
+      "usage": {
+        "completion_tokens": 18,
+        "prompt_tokens": 997,
+        "total_tokens": 1015,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687925",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "DiagnosticReport represents the findings and interpretation of diagnostic tests, summarizing a diagnostic investigation."
+          }
+        ],
+        "created": 1788687925,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 18,
+          "prompt_tokens": 997,
+          "total_tokens": 1015,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.4891250357031822,
+          "throughput_tokens_per_second": 36.8004062072239,
+          "total_seconds": 0.4891250357031822
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 5,
+      "question": "A laboratory investigation produces several individual measurements and an overall interpretation. Which FHIR resources would represent these results, and how are they related?",
+      "expected_answer": "The individual measurements can be represented as Observation resources. The DiagnosticReport represents the overall diagnostic investigation and its interpretation and can reference those individual Observations.",
+      "source_documents": [
+        "02_observation_and_results.txt"
+      ],
+      "model_answer": "Observation would represent the individual measurements, while DiagnosticReport would represent the overall interpretation. DiagnosticReport references Observations to provide a clinical conclusion or interpretation.\n\nDiagnosticReport -> summarizes/interprets a diagnostic investigation -> may reference one or more Observation resources.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.56,
+      "usage": {
+        "completion_tokens": 50,
+        "prompt_tokens": 576,
+        "total_tokens": 626,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687926",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Observation would represent the individual measurements, while DiagnosticReport would represent the overall interpretation. DiagnosticReport references Observations to provide a clinical conclusion or interpretation.\n\nDiagnosticReport -> summarizes/interprets a diagnostic investigation -> may reference one or more Observation resources."
+          }
+        ],
+        "created": 1788687926,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 50,
+          "prompt_tokens": 576,
+          "total_tokens": 626,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 1.1339922677725554,
+          "throughput_tokens_per_second": 44.09201140164078,
+          "total_seconds": 1.1339922677725554
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 6,
+      "question": "A patient has a confirmed allergy to a medication. Which FHIR resource should represent the allergy?",
+      "expected_answer": "The AllergyIntolerance resource should be used. It records an individual's propensity or risk of an adverse reaction to a substance, including medication allergies.",
+      "source_documents": [
+        "03_conditions_allergies_medications.txt"
+      ],
+      "model_answer": "MedicationRequest.",
+      "finish_reason": "stop",
+      "latency_seconds": 0.542,
+      "usage": {
+        "completion_tokens": 5,
+        "prompt_tokens": 661,
+        "total_tokens": 666,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687928",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "MedicationRequest."
+          }
+        ],
+        "created": 1788687928,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 5,
+          "prompt_tokens": 661,
+          "total_tokens": 666,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.17319228313863277,
+          "throughput_tokens_per_second": 28.869646553465206,
+          "total_seconds": 0.17319228313863277
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 7,
+      "question": "What is the difference between MedicationRequest and MedicationStatement?",
+      "expected_answer": "MedicationRequest represents an order or request for medication and instructions for administration. MedicationStatement records an assertion that a patient is taking or has taken a medication, including information reported by a patient or clinician.",
+      "source_documents": [
+        "03_conditions_allergies_medications.txt"
+      ],
+      "model_answer": "MedicationRequest represents an order or request for medication and includes instructions for administration. \n\nMedicationStatement records an assertion about medication use, including information reported by a patient or clinician.",
+      "finish_reason": "stop",
+      "latency_seconds": 2.524,
+      "usage": {
+        "completion_tokens": 38,
+        "prompt_tokens": 655,
+        "total_tokens": 693,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687929",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "MedicationRequest represents an order or request for medication and includes instructions for administration. \n\nMedicationStatement records an assertion about medication use, including information reported by a patient or clinician."
+          }
+        ],
+        "created": 1788687929,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 38,
+          "prompt_tokens": 655,
+          "total_tokens": 693,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.887224156409502,
+          "throughput_tokens_per_second": 42.83021345336425,
+          "total_seconds": 0.887224156409502
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 8,
+      "question": "What does an Encounter represent in FHIR?",
+      "expected_answer": "Encounter represents an interaction between a patient and one or more healthcare providers for providing healthcare services or assessing health status. It can occur in settings such as outpatient, emergency, inpatient, home health, or virtual care.",
+      "source_documents": [
+        "01_fhir_core_resources.txt",
+        "04_patient_encounter_workflow.txt"
+      ],
+      "model_answer": "An Encounter represents an interaction between a patient and one or more healthcare providers for the purpose of providing healthcare services or assessing health status.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.182,
+      "usage": {
+        "completion_tokens": 27,
+        "prompt_tokens": 963,
+        "total_tokens": 990,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687931",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "An Encounter represents an interaction between a patient and one or more healthcare providers for the purpose of providing healthcare services or assessing health status."
+          }
+        ],
+        "created": 1788687931,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 27,
+          "prompt_tokens": 963,
+          "total_tokens": 990,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.6829988621175289,
+          "throughput_tokens_per_second": 39.53154462994391,
+          "total_seconds": 0.6829988621175289
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 9,
+      "question": "How does an Encounter provide context for other FHIR clinical resources?",
+      "expected_answer": "An Encounter provides context for many clinical events. For example, an Observation can identify the encounter during which a measurement was taken, and a DiagnosticReport can identify the encounter associated with a diagnostic investigation.",
+      "source_documents": [
+        "04_patient_encounter_workflow.txt"
+      ],
+      "model_answer": "Encounter provides context for other FHIR clinical resources through the following relationships:\n\n1. Observation: An Observation identifies the encounter during which a measurement was taken.\n2. DiagnosticReport: A DiagnosticReport identifies the encounter associated with the diagnostic investigation.\n3. Condition: While Condition represents a diagnosis/problem, it does not inherently provide context for other resources. However, Condition can be related to Encounter through Observation or other Condition references.\n4. MedicationRequest: MedicationRequest does not inherently provide context for Encounter.",
+      "finish_reason": "stop",
+      "latency_seconds": 2.617,
+      "usage": {
+        "completion_tokens": 102,
+        "prompt_tokens": 532,
+        "total_tokens": 634,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687932",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Encounter provides context for other FHIR clinical resources through the following relationships:\n\n1. Observation: An Observation identifies the encounter during which a measurement was taken.\n2. DiagnosticReport: A DiagnosticReport identifies the encounter associated with the diagnostic investigation.\n3. Condition: While Condition represents a diagnosis/problem, it does not inherently provide context for other resources. However, Condition can be related to Encounter through Observation or other Condition references.\n4. MedicationRequest: MedicationRequest does not inherently provide context for Encounter."
+          }
+        ],
+        "created": 1788687932,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 102,
+          "prompt_tokens": 532,
+          "total_tokens": 634,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 2.2502144016325474,
+          "throughput_tokens_per_second": 45.329013949070024,
+          "total_seconds": 2.2502144016325474
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 10,
+      "question": "A patient has a blood pressure measurement recorded during an outpatient visit. Which FHIR resources naturally represent the patient, healthcare interaction, and measurement?",
+      "expected_answer": "Patient represents the individual receiving care, Encounter represents the outpatient healthcare interaction, and Observation represents the blood pressure measurement. The Observation can reference the Encounter to provide context.",
+      "source_documents": [
+        "01_fhir_core_resources.txt",
+        "04_patient_encounter_workflow.txt"
+      ],
+      "model_answer": "Based on the HL7 FHIR R4 specification, the resources that naturally represent the patient, healthcare interaction, and measurement are:\n\n- Patient: Represents the individual receiving healthcare services.\n- Encounter: Represents the interaction between the patient and healthcare provider(s) during the outpatient visit.\n- Observation: Represents the measurement of blood pressure.\n\nThese resources are directly related to each other through the Encounter resource.",
+      "finish_reason": "stop",
+      "latency_seconds": 2.311,
+      "usage": {
+        "completion_tokens": 79,
+        "prompt_tokens": 982,
+        "total_tokens": 1061,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687935",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Based on the HL7 FHIR R4 specification, the resources that naturally represent the patient, healthcare interaction, and measurement are:\n\n- Patient: Represents the individual receiving healthcare services.\n- Encounter: Represents the interaction between the patient and healthcare provider(s) during the outpatient visit.\n- Observation: Represents the measurement of blood pressure.\n\nThese resources are directly related to each other through the Encounter resource."
+          }
+        ],
+        "created": 1788687935,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 79,
+          "prompt_tokens": 982,
+          "total_tokens": 1061,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 1.799254547804594,
+          "throughput_tokens_per_second": 43.90707256868899,
+          "total_seconds": 1.799254547804594
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 11,
+      "question": "What is AllergyIntolerance used to represent, and what are some important fields it can contain?",
+      "expected_answer": "AllergyIntolerance represents an individual's allergy or intolerance and risk of an adverse reaction to a substance. Important fields include clinicalStatus, verificationStatus, type, category, criticality, code identifying the substance, patient, and reaction details.",
+      "source_documents": [
+        "03_conditions_allergies_medications.txt"
+      ],
+      "model_answer": "AllergyIntolerance represents an individual’s propensity or risk of an adverse reaction to a substance. Important fields it can contain include:\n\n- clinicalStatus\n- verificationStatus\n- type\n- category\n- criticality\n- code identifying the substance or concept\n- patient",
+      "finish_reason": "stop",
+      "latency_seconds": 1.652,
+      "usage": {
+        "completion_tokens": 55,
+        "prompt_tokens": 662,
+        "total_tokens": 717,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687937",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "AllergyIntolerance represents an individual’s propensity or risk of an adverse reaction to a substance. Important fields it can contain include:\n\n- clinicalStatus\n- verificationStatus\n- type\n- category\n- criticality\n- code identifying the substance or concept\n- patient"
+          }
+        ],
+        "created": 1788687937,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 55,
+          "prompt_tokens": 662,
+          "total_tokens": 717,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 1.2566110044717789,
+          "throughput_tokens_per_second": 43.76851691118164,
+          "total_seconds": 1.2566110044717789
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 12,
+      "question": "How does a typical medication workflow differ between MedicationRequest, MedicationDispense, and MedicationAdministration?",
+      "expected_answer": "MedicationRequest represents the medication order or request, MedicationDispense represents provision of the medication supply, and MedicationAdministration represents the actual administration of the medication.",
+      "source_documents": [
+        "03_conditions_allergies_medications.txt"
+      ],
+      "model_answer": "MedicationRequest represents an order or request for medication. \n\nMedicationDispense represents the provision of medication supply. \n\nMedicationAdministration represents an actual administration of medication.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.312,
+      "usage": {
+        "completion_tokens": 35,
+        "prompt_tokens": 664,
+        "total_tokens": 699,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687939",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "MedicationRequest represents an order or request for medication. \n\nMedicationDispense represents the provision of medication supply. \n\nMedicationAdministration represents an actual administration of medication."
+          }
+        ],
+        "created": 1788687939,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 35,
+          "prompt_tokens": 664,
+          "total_tokens": 699,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.8226728197187185,
+          "throughput_tokens_per_second": 42.54425229700297,
+          "total_seconds": 0.8226728197187185
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 13,
+      "question": "What is prior authorization in healthcare, and what is its basic workflow?",
+      "expected_answer": "Prior authorization is a healthcare administrative workflow in which a payer evaluates whether a requested item or service meets the payer's requirements before approval. A simplified workflow is: identify the requested service, determine whether authorization is required, identify documentation requirements, submit the request and supporting information, evaluate it, and return approval, denial with a reason, or a request for more information.",
+      "source_documents": [
+        "05_healthcare_prior_authorization_and_fhir.txt"
+      ],
+      "model_answer": "Prior authorization is a healthcare administrative workflow where a payer evaluates whether a requested item or service meets their requirements before approval. \n\nThe basic workflow involves the following steps:\n\n1. Provider identifies a requested service or item.\n2. Payer rules determine whether prior authorization is required.\n3. Required documentation is identified.\n4. Provider submits the authorization request and supporting information.\n5. Payer evaluates the request.\n6. Payer returns an approval, denial with a reason, or request for more information.",
+      "finish_reason": "stop",
+      "latency_seconds": 2.604,
+      "usage": {
+        "completion_tokens": 100,
+        "prompt_tokens": 547,
+        "total_tokens": 647,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687940",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Prior authorization is a healthcare administrative workflow where a payer evaluates whether a requested item or service meets their requirements before approval. \n\nThe basic workflow involves the following steps:\n\n1. Provider identifies a requested service or item.\n2. Payer rules determine whether prior authorization is required.\n3. Required documentation is identified.\n4. Provider submits the authorization request and supporting information.\n5. Payer evaluates the request.\n6. Payer returns an approval, denial with a reason, or request for more information."
+          }
+        ],
+        "created": 1788687940,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 100,
+          "prompt_tokens": 547,
+          "total_tokens": 647,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 2.2092047799378633,
+          "throughput_tokens_per_second": 45.26515645272713,
+          "total_seconds": 2.2092047799378633
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 14,
+      "question": "What is the relationship between FHIR and prior authorization?",
+      "expected_answer": "FHIR provides a standardized healthcare data model and exchange framework, while prior authorization is a business workflow that uses healthcare information and payer rules to make an authorization decision. CMS requirements include APIs based on HL7 FHIR to improve prior authorization and health information exchange.",
+      "source_documents": [
+        "05_healthcare_prior_authorization_and_fhir.txt"
+      ],
+      "model_answer": "FHIR provides a standardized data model and exchange framework for healthcare information exchange. Prior authorization is a business workflow that uses healthcare information and payer rules to make an authorization decision.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.186,
+      "usage": {
+        "completion_tokens": 35,
+        "prompt_tokens": 544,
+        "total_tokens": 579,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687942",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "FHIR provides a standardized data model and exchange framework for healthcare information exchange. Prior authorization is a business workflow that uses healthcare information and payer rules to make an authorization decision."
+          }
+        ],
+        "created": 1788687942,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 35,
+          "prompt_tokens": 544,
+          "total_tokens": 579,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.8095721043646336,
+          "throughput_tokens_per_second": 43.23271492595291,
+          "total_seconds": 0.8095721043646336
+        },
+        "confidence": null
+      }
+    },
+    {
+      "id": 15,
+      "question": "An AI system is asked whether a prior authorization request should be approved, but the submitted clinical data does not contain enough information to determine the payer's requirements. How should the system distinguish its response?",
+      "expected_answer": "The system should distinguish between information explicitly present in the submitted clinical or administrative data, payer policy or documentation requirements, and conclusions that require additional information. It should not present a conclusion as established when the necessary information is missing.",
+      "source_documents": [
+        "05_healthcare_prior_authorization_and_fhir.txt"
+      ],
+      "model_answer": "Based on the provided domain reference, the AI system should distinguish its response by stating that conclusions require additional information.",
+      "finish_reason": "stop",
+      "latency_seconds": 1.012,
+      "usage": {
+        "completion_tokens": 23,
+        "prompt_tokens": 572,
+        "total_tokens": 595,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": null
+      },
+      "confidence": null,
+      "error": null,
+      "raw_response": {
+        "id": "chatcmpl-ed276899-1788687944",
+        "choices": [
+          {
+            "finish_reason": "stop",
+            "index": 0,
+            "logprobs": null,
+            "text": "Based on the provided domain reference, the AI system should distinguish its response by stating that conclusions require additional information."
+          }
+        ],
+        "created": 1788687944,
+        "model": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+        "object": "text_completion",
+        "system_fingerprint": null,
+        "usage": {
+          "completion_tokens": 23,
+          "prompt_tokens": 572,
+          "total_tokens": 595,
+          "completion_tokens_details": null,
+          "prompt_tokens_details": null
+        },
+        "timing": {
+          "ttft_seconds": 0.5531182773411274,
+          "throughput_tokens_per_second": 41.582426295081724,
+          "total_seconds": 0.5531182773411274
+        },
+        "confidence": null
+      }
+    }
+  ]
+}

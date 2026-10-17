@@ -1,0 +1,44 @@
+Healthcare Domain Reference: Prior Authorization and FHIR APIs
+
+Prior authorization is a healthcare administrative workflow in which a
+payer evaluates whether a requested item or service meets the payer’s
+requirements before approval.
+
+The CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F)
+focuses on improving health information exchange and prior authorization
+processes through APIs based on HL7 FHIR.
+
+The rule includes a Prior Authorization API that is intended to: -
+expose a payer’s covered items and services - identify documentation
+requirements for prior authorization - support submission of prior
+authorization requests - return prior authorization responses -
+communicate approval, denial with a specific reason, or a request for
+additional information
+
+The broader interoperability requirements also involve APIs for
+exchanging healthcare data between patients, providers, and payers.
+
+Useful distinction: FHIR provides a standardized data model and exchange
+framework, while prior authorization is a business workflow that uses
+healthcare information and payer rules to make an authorization
+decision.
+
+A simplified prior authorization workflow is:
+
+1.  Provider identifies a requested service or item.
+2.  Payer rules determine whether prior authorization is required.
+3.  Required documentation is identified.
+4.  Provider submits the authorization request and supporting
+    information.
+5.  Payer evaluates the request.
+6.  Payer returns an approval, denial with a reason, or request for more
+    information.
+
+For an AI system operating in this domain, answers should distinguish
+between: - information explicitly present in the submitted
+clinical/administrative data - payer policy or documentation
+requirements - conclusions that require additional information
+
+Source: CMS Interoperability and Prior Authorization Final Rule,
+CMS-0057-F.
+https://www.cms.gov/initiatives/burden-reduction/overview/interoperability/policies-regulations/cms-interoperability-prior-authorization-final-rule-cms-0057-f
