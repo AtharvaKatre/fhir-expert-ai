@@ -32,7 +32,7 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / ".env")
 API = os.getenv("NUGEN_BASE_URL", "https://api.nugen.in").rstrip("/") + "/api/v3"
-STATE_PATH = ROOT / "data" / "provision_state.json"
+STATE_PATH = Path(os.getenv("PROVISION_STATE_PATH", ROOT / "data" / "provision_state.json"))
 BASE_MODEL = os.getenv("EXPERT_BASE_MODEL_ID", "meta-llama/Llama-3.2-3B-Instruct")
 
 EXPERT_SPECS = {

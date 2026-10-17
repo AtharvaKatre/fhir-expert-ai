@@ -125,7 +125,7 @@ Deployment takes 5–15 minutes per model. Each organisation has 10 deployment s
 
 ```bash
 python scripts/run_benchmark.py --mode routing_only --label routing-v1      # router only (cheap)
-python scripts/run_benchmark.py --mode single_fhir_expert --label single-v1 # single-model baseline
+python scripts/run_benchmark.py --mode stage1_single_model --label stage1 # stage 1 app baseline
 python scripts/run_benchmark.py --label panel-v1                            # full system
 # collect feedback in the UI, then (for a deployed app, export first):
 curl -H "X-Admin-Token: $ADMIN_TOKEN" https://<app-url>/feedback/export > feedback.jsonl
@@ -134,6 +134,22 @@ python scripts/run_benchmark.py --label panel-v2 --compare results/orchestration
 ```
 
 Metrics: routing precision, recall and exact match against `expected_experts`; key-point coverage of the final answer; pass rate (coverage ≥ 0.6); expert failure rate; router fallback rate; latency.
+
+### Results (live Nugen models, 15-case benchmark)
+
+| Metric | Stage 1 app (one aligned model + grounding) | Expert panel (router + 3 aligned experts + synthesis) |
+|---|---:|---:|
+| Pass rate (key-point coverage ≥ 0.6) | 53.3% | **100%** |
+| Key-point coverage | 0.594 | **0.948** |
+| Prior-authorization cases passed | 0 / 4 | **4 / 4** |
+| Expert call failures | 0 / 15 | 1 / 26 (gateway 504, isolated) |
+| Average latency | 7.3 s | 30.8 s |
+
+Router accuracy against the expected experts: recall 0.933, precision 0.733. The router tends to add the FHIR structure expert as a second opinion. Raw outputs: [`results/orchestration_stage1.json`](results/orchestration_stage1.json), [`results/orchestration_panel-v1.json`](results/orchestration_panel-v1.json).
+
+Example: for "A clinician orders an MRI. Which resource represents the order, and how would the EHR discover whether prior authorization is required?", the stage 1 app answered *MedicationRequest* with an invented element. The panel answered *ServiceRequest* + Da Vinci CRD via CDS Hooks.
+
+Caveats: lexical key-point scoring is a proxy, so answers were also spot-checked by hand. Latency is the main cost of the panel, since router, experts and synthesis are sequential stages, and is the next thing to optimise (streaming, smaller `max_tokens`).
 
 ### How the system improves over time
 

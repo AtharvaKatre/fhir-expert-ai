@@ -5,4 +5,5 @@ __pycache__/
 .venv/
 venv/
 data/feedback.jsonl
-data/provision_state.json
+data/provision_state*.json
+data/*.log

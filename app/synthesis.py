@@ -1,5 +1,6 @@
 """Synthesis: combine successful expert answers into one response."""
 import os
+import re
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -64,6 +65,8 @@ def synthesize(question: str, outputs, failed_experts: List[str]) -> SynthesisRe
         return SynthesisResult(
             answer=_concatenate(outputs), method="concatenation_fallback", model_id=model_id, error=str(exc)
         )
+    answer = re.sub(r"^\s*here is the (combined|merged) answer\s*:?\s*", "", result.content, flags=re.IGNORECASE)
     return SynthesisResult(
-        answer=result.content, method="model", model_id=model_id, latency_seconds=result.latency_seconds
+        answer=answer or result.content, method="model", model_id=model_id,
+        latency_seconds=result.latency_seconds,
     )

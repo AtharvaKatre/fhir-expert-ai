@@ -9,7 +9,7 @@ Scores, per case:
 Usage (from the project root):
   python scripts/run_benchmark.py --label baseline
   python scripts/run_benchmark.py --label after-feedback --compare results/orchestration_baseline.json
-  python scripts/run_benchmark.py --mode single_fhir_expert --label single-model
+  python scripts/run_benchmark.py --mode stage1_single_model --label stage1     # stage 1 app (/analyze) baseline
   python scripts/run_benchmark.py --mode routing_only --label routing   # router calls only (cheap)
   python scripts/run_benchmark.py --mock --label harness-check           # no API calls
 """
@@ -67,7 +67,19 @@ def run_case(case, mode):
 
     resource = case.get("resource") or {}
     start = time.perf_counter()
-    if mode == "routing_only":
+    if mode == "stage1_single_model":
+        # The stage 1 application exactly as submitted: one aligned model, resource-aware grounding.
+        from app.main import MODEL_ID, call_nugen, choose_docs
+
+        docs = choose_docs(resource.get("resourceType", ""), case["question"])
+        try:
+            answer, _, _, _ = call_nugen(case["question"], resource, docs)
+            trace = {"route": {"experts": ["fhir_structure"], "method": "single_model"}, "answer": answer,
+                     "experts": [{"expert": "stage1", "status": "ok", "error": None}]}
+        except Exception as exc:
+            trace = {"route": {"experts": ["fhir_structure"], "method": "single_model"}, "answer": "",
+                     "experts": [{"expert": "stage1", "status": "error", "error": str(exc), "model_id": MODEL_ID}]}
+    elif mode == "routing_only":
         decision = route(case["question"], resource.get("resourceType", ""))
         trace = {"route": {"experts": decision.experts, "method": decision.method, "error": decision.error},
                  "answer": "", "experts": []}
@@ -130,7 +142,7 @@ def summarize(rows, mode):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--label", default=datetime.now().strftime("%Y%m%d-%H%M%S"))
-    parser.add_argument("--mode", choices=["orchestrated", "single_fhir_expert", "routing_only"],
+    parser.add_argument("--mode", choices=["orchestrated", "stage1_single_model", "single_fhir_expert", "routing_only"],
                         default="orchestrated")
     parser.add_argument("--cases", nargs="*", default=DEFAULT_CASE_FILES)
     parser.add_argument("--limit", type=int)

@@ -6,5 +6,5 @@ __pycache__/
 *.pyc
 *.zip
 data/feedback.jsonl
-data/provision_state.json
+data/provision_state*.json
 .git/

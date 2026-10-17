@@ -1,0 +1,380 @@
+{
+  "label": "stage1",
+  "mode": "stage1_single_model",
+  "mock": false,
+  "run_at": "2026-10-17T10:00:28.848882+00:00",
+  "config": {
+    "router_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "synthesis_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "experts": {
+      "fhir_structure": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+      "clinical_terminology": null,
+      "prior_authorization": null
+    },
+    "pass_threshold": 0.6
+  },
+  "summary": {
+    "cases": 15,
+    "routing_precision": 0.467,
+    "routing_recall": 0.333,
+    "routing_exact_match": 0.2,
+    "router_fallback_rate": 0.0,
+    "avg_latency_seconds": 7.297,
+    "key_point_coverage": 0.594,
+    "pass_rate": 0.533,
+    "expert_calls": 15,
+    "expert_failure_rate": 0.0
+  },
+  "cases": [
+    {
+      "id": "fhir-01",
+      "question": "What is the primary purpose of the FHIR Patient resource?",
+      "expected_experts": [
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 3.152,
+      "answer": "The primary purpose of the FHIR Patient resource is to represent demographic and administrative information about an individual receiving healthcare services.",
+      "errors": []
+    },
+    {
+      "id": "fhir-02",
+      "question": "A blood pressure was recorded during an outpatient visit. Which FHIR resources represent the patient, the visit and the measurement, and how are they linked?",
+      "expected_experts": [
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.8,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 17.578,
+      "answer": "Based on the provided FHIR R4 Domain Reference, the patient, visit, and measurement can be represented as follows:\n\nPatient: Patient resource\n- Patient ID: Unique identifier for the patient (missing from the provided JSON)\n- Demographic and administrative information\n\nVisit: Encounter resource\n- Encounter ID: Unique identifier for the encounter\n- Patient reference: Reference to the Patient resource\n- Encounter type: Outpatient visit (missing from the provided JSON)\n- Encounter status: Scheduled or completed (missing from the provided JSON)\n\nMeasurement: Observation resource\n- Observation ID: Unique identifier for the observation\n- Encounter reference: Reference to the Encounter resource\n- Observation status: Completed (missing from the provided JSON)\n- Observation value: Blood pressure measurement value (missing from the provided JSON)\n\nRelationship:\nPatient | +– Encounter | | | +– Observation\nPatient reference: Patient\nEncounter reference: Encounter\nObservation reference: Encounter",
+      "errors": []
+    },
+    {
+      "id": "fhir-03",
+      "question": "What is the difference between a DiagnosticReport and an Observation?",
+      "expected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 0.5,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 7.084,
+      "answer": "DiagnosticReport represents the findings and interpretation of diagnostic tests, including laboratory, pathology, microbiology, hematology, and other diagnostic information. It provides a clinical conclusion or interpretation and may reference individual Observation resources.\n\nObservation records measurements and simple assertions about a patient, device, or other subject, such as blood pressure, body temperature, or laboratory atomic results.",
+      "errors": []
+    },
+    {
+      "id": "fhir-04",
+      "question": "How should a Practitioner and the Organization they work for be related in FHIR?",
+      "expected_experts": [
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.667,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 3.274,
+      "answer": "Based on the HL7 FHIR R4 specification, a Practitioner and the Organization they work for should be related through the Organization resource.",
+      "errors": []
+    },
+    {
+      "id": "clin-01",
+      "question": "What do the LOINC codes and units in this resource mean, and is the result complete?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.4,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 9.819,
+      "answer": "Based on the provided FHIR Observation resource, the LOINC codes and units represent the measurement values for Blood Pressure. \n\n- The LOINC code \"85354-9\" corresponds to \"Blood pressure panel\".\n- The LOINC code \"8480-6\" corresponds to Systolic Blood Pressure.\n- The LOINC code \"8462-4\" corresponds to Diastolic Blood Pressure.\n\nThe result is complete, as it includes measurements for both systolic and diastolic blood pressure.",
+      "errors": []
+    },
+    {
+      "id": "clin-02",
+      "question": "Is this condition a current confirmed diagnosis, and what code systems are used?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.8,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 7.77,
+      "answer": "Yes, this Condition represents a current confirmed diagnosis. \n\nThe code systems used are:\n\n- SNOMED CT (http://snomed.info/sct) with code \"44054006\" for Diabetes mellitus type 2.\n- ICD-10-CM (http://hl7.org/fhir/sid/icd-10-cm) with code \"E11.9\".",
+      "errors": []
+    },
+    {
+      "id": "clin-03",
+      "question": "What is the difference between criticality and reaction severity in an AllergyIntolerance?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.5,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 11.14,
+      "answer": "According to the HL7 FHIR R4 specification, criticality and reaction severity are related but distinct concepts.\n\nCriticality refers to the level of concern or risk associated with an allergy or intolerance. It is a categorical value that indicates the severity of the allergy or intolerance, with levels including:\n\n- low\n- high\n- unable-to-assess\n\nReaction severity, on the other hand, refers to the specific symptoms or manifestations of an adverse reaction. It is not explicitly defined in the provided specification, but it is implied to be a subjective assessment of the severity of the reaction.",
+      "errors": []
+    },
+    {
+      "id": "clin-04",
+      "question": "How do MedicationRequest, MedicationStatement and MedicationAdministration differ?",
+      "expected_experts": [
+        "clinical_terminology",
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 0.5,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 14.605,
+      "answer": "MedicationRequest, MedicationStatement, and MedicationAdministration differ as follows:\n\n1. **MedicationRequest**:\n   - Represents an order or request for medication.\n   - Includes instructions for administration.\n   - Used for inpatient and outpatient medication orders.\n   - Distinguished from MedicationDispense and MedicationAdministration.\n\n2. **MedicationStatement**:\n   - Records a patient's current medication use.\n   - Includes information reported by the patient or clinician.\n   - Used to track medication use, not to request medication.\n\n3. **MedicationAdministration**:\n   - Represents an actual administration of medication.\n   - Used to record medication administration events.\n   - Distinguished from MedicationRequest and MedicationDispense.",
+      "errors": []
+    },
+    {
+      "id": "clin-05",
+      "question": "This lab Observation has status entered-in-error. Can it be used to interpret the patient's glucose?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 2.582,
+      "answer": "No, an Observation with status \"entered-in-error\" cannot be used to interpret the patient's glucose.",
+      "errors": []
+    },
+    {
+      "id": "pa-01",
+      "question": "Which Da Vinci implementation guides support prior authorization and what does each one do?",
+      "expected_experts": [
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.0,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 12.65,
+      "answer": "Based on the provided FHIR Domain Reference, there is no specific FHIR resource type or implementation guide that directly supports prior authorization. However, the CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F) mentions that the Prior Authorization API is intended to expose a payer’s covered items and services, identify documentation requirements for prior authorization, support submission of prior authorization requests, return prior authorization responses, and communicate approval, denial with a specific reason, or a request for additional information.\n\nDa Vinci implementation guides, such as HL7 FHIR Implementation Guides, may provide additional structure and conformance requirements for implementing the Prior Authorization API.",
+      "errors": []
+    },
+    {
+      "id": "pa-02",
+      "question": "How is a prior authorization request represented in FHIR and how is the payer decision returned?",
+      "expected_experts": [
+        "prior_authorization",
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 0.5,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.0,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 2.656,
+      "answer": "Based on the provided FHIR Domain Reference, a prior authorization request is represented as a `PriorAuthorizationRequest` resource.",
+      "errors": []
+    },
+    {
+      "id": "pa-03",
+      "question": "Under CMS-0057-F, how quickly must impacted payers decide expedited and standard prior authorization requests?",
+      "expected_experts": [
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.5,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 2.649,
+      "answer": "Based on CMS-0057-F, the payer must respond to expedited prior authorization requests within 72 hours.",
+      "errors": []
+    },
+    {
+      "id": "pa-04",
+      "question": "What is the relationship between the FHIR PAS guide and the X12 278 transaction?",
+      "expected_experts": [
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.25,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 3.558,
+      "answer": "Based on the provided FHIR R4 domain references, there is no direct relationship described between the FHIR PAS guide and the X12 278 transaction.",
+      "errors": []
+    },
+    {
+      "id": "multi-01",
+      "question": "A clinician orders an MRI. Which FHIR resource represents the order, and how would the EHR discover whether prior authorization is required?",
+      "expected_experts": [
+        "fhir_structure",
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 1.0,
+      "routing_recall": 0.5,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 0.0,
+      "passed": false,
+      "synthesis_method": null,
+      "latency_seconds": 4.79,
+      "answer": "Based on the provided FHIR resource, the clinician orders an MRI. The FHIR resource that represents the order is Observation.\n\nObservation represents clinical observations and measurements. Observation requests are submitted to the payer for prior authorization.",
+      "errors": []
+    },
+    {
+      "id": "multi-02",
+      "question": "For this medication order, which code system identifies the drug and what payer process might apply before it is dispensed?",
+      "expected_experts": [
+        "clinical_terminology",
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure"
+      ],
+      "route_method": "single_model",
+      "routing_precision": 0.0,
+      "routing_recall": 0.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "stage1": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "passed": true,
+      "synthesis_method": null,
+      "latency_seconds": 6.144,
+      "answer": "Based on the provided FHIR resource, the medication code is identified by the code system \"http://www.nlm.nih.gov/research/umls/rxnorm\" and the code \"000000\". \n\nThe payer process that might apply before dispensing the medication is prior authorization.",
+      "errors": []
+    }
+  ]
+}
