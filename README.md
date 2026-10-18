@@ -135,21 +135,30 @@ python scripts/run_benchmark.py --label panel-v2 --compare results/orchestration
 
 Metrics: routing precision, recall and exact match against `expected_experts`; key-point coverage of the final answer; pass rate (coverage ≥ 0.6); expert failure rate; router fallback rate; latency.
 
-### Results (live Nugen models, 15-case benchmark)
+### Results (live Nugen models)
 
-| Metric | Stage 1 app (one aligned model + grounding) | Expert panel (router + 3 aligned experts + synthesis) |
-|---|---:|---:|
-| Pass rate (key-point coverage ≥ 0.6) | 53.3% | **100%** |
-| Key-point coverage | 0.594 | **0.948** |
-| Prior-authorization cases passed | 0 / 4 | **4 / 4** |
-| Expert call failures | 0 / 15 | 1 / 26 (gateway 504, isolated) |
-| Average latency | 7.3 s | 30.8 s |
+A case passes when key-point coverage is at least 0.6 **and** every `must_include` point (the core fact, e.g. *PractitionerRole*) is present. Earlier runs were re-scored with this stricter rule (`run_benchmark.py --rescore`).
 
-Router accuracy against the expected experts: recall 0.933, precision 0.733. The router tends to add the FHIR structure expert as a second opinion. Raw outputs: [`results/orchestration_stage1.json`](results/orchestration_stage1.json), [`results/orchestration_panel-v1.json`](results/orchestration_panel-v1.json).
+| Run | Cases | Pass rate | Key-point coverage | Expert failures | Avg latency |
+|---|---:|---:|---:|---:|---:|
+| Stage 1 app (one aligned model + grounding) | 15 | 46.7% | 0.594 | 0 / 15 | 7.3 s |
+| Expert panel v1 | 15 | 93.3% | 0.948 | 1 / 26 (gateway 504, isolated) | 30.8 s |
+| Expert panel v2 (+ 1 feedback case, PractitionerRole fix) | 16 | 81.2% | 0.811 | 0 / 28 | 18.0 s |
+| **Expert panel v3** (+ CRD fix) | 16 | **100%** | **0.934** | 0 / 30 | 17.2 s |
 
-Example: for "A clinician orders an MRI. Which resource represents the order, and how would the EHR discover whether prior authorization is required?", the stage 1 app answered *MedicationRequest* with an invented element. The panel answered *ServiceRequest* + Da Vinci CRD via CDS Hooks.
+Prior-authorization cases: stage 1 passed 0 / 4, the panel passes 4 / 4. Router recall against the expected experts is 0.933 and precision 0.733, because the router tends to add the FHIR structure expert as a second opinion. The v1 to v3 latency drop is most likely warm models and the absence of gateway timeouts, not a code change. Raw outputs are in [`results/`](results/).
 
-Caveats: lexical key-point scoring is a proxy, so answers were also spot-checked by hand. Latency is the main cost of the panel, since router, experts and synthesis are sequential stages, and is the next thing to optimise (streaming, smaller `max_tokens`).
+### One improvement cycle, end to end (live)
+
+1. **Testing the deployed app** showed two wrong answers. "Which resource links a Practitioner to its Organization?" got *Organization* (correct: **PractitionerRole**). The MRI question claimed *CoverageEligibilityRequest* tells the EHR whether prior authorization is required (correct: **Da Vinci CRD via CDS Hooks**).
+2. **User feedback:** a 👎 with key points `CRD, CDS Hooks` was exported from the live app (`/feedback/export`), and `improve_from_feedback.py` turned it into regression case `fb-58f98fc327`.
+3. **The benchmark was tightened.** v1 had "passed" the PractitionerRole case at 2/3 coverage without the core fact, so `must_include` points were added and old runs re-scored.
+4. **v2 confirmed the diagnosis.** The PractitionerRole case now passed after adding [`expert_docs/fhir_structure/practitioners_and_organizations.txt`](expert_docs/fhir_structure/practitioners_and_organizations.txt) to the FHIR expert's grounding. The feedback case and `multi-01` still failed on CRD. `multi-01` had passed in v1 by chance.
+5. **The fix:** a "common mistakes" section in the prior-auth grounding contrasting CoverageEligibilityRequest with CRD. **v3: 16 / 16.**
+
+Neither fix retrained a model. Both are inference-time grounding changes, so the improvement shipped with a normal deploy. With inference capture enabled, the same failures are also captured on Nugen as training data for re-alignment.
+
+Caveats: 16 cases is small, and single runs at temperature 0.2 vary by about one case (for example `fhir-01` dipped in v2 on wording alone). Lexical scoring is a proxy, so answers were also checked by hand. I wrote the grounding docs and benchmark, so they share vocabulary.
 
 ### How the system improves over time
 

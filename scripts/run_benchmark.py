@@ -4,7 +4,8 @@ Scores, per case:
   - routing precision / recall against `expected_experts`
   - key-point coverage of the final answer (case-insensitive substring match;
     each key point is a list of acceptable alternatives)
-  - pass = coverage >= PASS_THRESHOLD and at least one expert answered
+  - pass = coverage >= PASS_THRESHOLD, every `must_include` point present,
+    and at least one expert answered
 
 Usage (from the project root):
   python scripts/run_benchmark.py --label baseline
@@ -12,6 +13,7 @@ Usage (from the project root):
   python scripts/run_benchmark.py --mode stage1_single_model --label stage1     # stage 1 app (/analyze) baseline
   python scripts/run_benchmark.py --mode routing_only --label routing   # router calls only (cheap)
   python scripts/run_benchmark.py --mock --label harness-check           # no API calls
+  python scripts/run_benchmark.py --rescore results/orchestration_panel-v1.json   # re-apply scoring, no API calls
 """
 import argparse
 import json
@@ -93,6 +95,7 @@ def run_case(case, mode):
 
     precision, recall, exact = routing_scores(trace["route"]["experts"], case.get("expected_experts", []))
     coverage = key_point_coverage(trace.get("answer", ""), case.get("key_points", []))
+    must_ok = key_point_coverage(trace.get("answer", ""), case.get("must_include", [])) == 1.0
     expert_statuses = {e["expert"]: e["status"] for e in trace.get("experts", [])}
     answered = any(s == "ok" for s in expert_statuses.values())
     return {
@@ -106,7 +109,8 @@ def run_case(case, mode):
         "routing_exact": exact,
         "expert_statuses": expert_statuses,
         "key_point_coverage": None if mode == "routing_only" else coverage,
-        "passed": None if mode == "routing_only" else (answered and coverage >= PASS_THRESHOLD),
+        "must_include_ok": must_ok,
+        "passed": None if mode == "routing_only" else (answered and coverage >= PASS_THRESHOLD and must_ok),
         "synthesis_method": (trace.get("synthesis") or {}).get("method"),
         "latency_seconds": latency,
         "answer": trace.get("answer", ""),
@@ -139,6 +143,27 @@ def summarize(rows, mode):
     return summary
 
 
+def rescore(path: Path, cases):
+    """Apply the current scoring rules (e.g. new must_include points) to saved answers."""
+    saved = json.loads(path.read_text(encoding="utf-8"))
+    by_id = {c.get("id"): c for c in cases}
+    for row in saved["cases"]:
+        case = by_id.get(row["id"])
+        if not case or saved["mode"] == "routing_only":
+            continue
+        answered = any(s == "ok" for s in row["expert_statuses"].values()) and bool(row["answer"])
+        row["key_point_coverage"] = key_point_coverage(row["answer"], case.get("key_points", []))
+        row["must_include_ok"] = key_point_coverage(row["answer"], case.get("must_include", [])) == 1.0
+        row["passed"] = answered and row["key_point_coverage"] >= PASS_THRESHOLD and row["must_include_ok"]
+    before = saved["summary"]
+    saved["summary"] = summarize(saved["cases"], saved["mode"])
+    saved["rescored_at"] = datetime.now(timezone.utc).isoformat()
+    path.write_text(json.dumps(saved, indent=2, ensure_ascii=False), encoding="utf-8")
+    print(f"{path.name}: pass_rate {before.get('pass_rate')} -> {saved['summary']['pass_rate']}, "
+          f"coverage {before.get('key_point_coverage')} -> {saved['summary']['key_point_coverage']}")
+    print("  now failing:", [r["id"] for r in saved["cases"] if r["passed"] is False])
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--label", default=datetime.now().strftime("%Y%m%d-%H%M%S"))
@@ -148,7 +173,12 @@ def main():
     parser.add_argument("--limit", type=int)
     parser.add_argument("--compare", help="previous results JSON to diff against")
     parser.add_argument("--mock", action="store_true", help="use the offline mock instead of the Nugen API")
+    parser.add_argument("--rescore", help="re-score the saved answers in a results file with the current cases")
     args = parser.parse_args()
+
+    if args.rescore:
+        rescore(Path(args.rescore), load_cases(args.cases))
+        return
 
     if args.mock:
         os.environ["NUGEN_MOCK"] = "1"

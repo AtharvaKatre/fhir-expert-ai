@@ -1,0 +1,21 @@
+Practitioners, Roles and Organizations in HL7 FHIR R4
+
+Added after user feedback showed the panel answering "Organization" instead of PractitionerRole.
+
+Practitioner
+Practitioner represents a person who is directly or indirectly involved in providing healthcare, such as a physician, nurse, pharmacist or therapist. It holds identity information: identifiers such as a national provider identifier, name, contact details, gender, birth date and qualifications. Practitioner does not have an element that says which organization the person works for, because one person can work for several organizations in different roles.
+
+PractitionerRole
+PractitionerRole links a Practitioner to an Organization. PractitionerRole.practitioner references the Practitioner and PractitionerRole.organization references the Organization. It also describes what the practitioner does there: code (the role, for example doctor or nurse), specialty, location (references to Location), healthcareService, availableTime and the period during which the role is valid. A practitioner who works at two hospitals has one Practitioner resource and two PractitionerRole resources.
+When a clinical resource needs to say who performed or requested something in the context of an organization, it often references the PractitionerRole rather than the Practitioner, for example ServiceRequest.requester or Encounter.participant.individual.
+
+Organization
+Organization represents a formally recognized group of people or organizations, such as a hospital, clinic, department, payer or insurance company. Organization.partOf references a parent Organization, so a department can be part of a hospital and a hospital part of a health system. Organization.partOf links organizations to each other; it does not link practitioners to organizations.
+
+Location and HealthcareService
+Location is a physical place where services are provided, such as a building, ward or room. Location.managingOrganization references the Organization responsible for it. HealthcareService describes a service an organization provides, such as an MRI imaging service, and references the providing Organization and its Locations.
+
+Common mistakes
+- Saying Practitioner references its employer: it does not; use PractitionerRole.
+- Using Organization.partOf to attach a practitioner: partOf is only for organization hierarchies.
+- Treating Organization as the link between a practitioner and an organization: Organization is one end of the link, PractitionerRole is the link.

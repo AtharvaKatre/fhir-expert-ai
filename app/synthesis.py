@@ -8,7 +8,10 @@ from app import nugen_client
 from app.experts import EXPERTS
 
 DEFAULT_SYNTH_MODEL = "meta-llama/Llama-3.2-3B-Instruct"
-LOW_CONFIDENCE_THRESHOLD = float(os.getenv("LOW_CONFIDENCE_THRESHOLD", "50"))
+# Small models often prefix "Here's the combined answer:"; strip it so the UI shows only the answer.
+PREAMBLE = re.compile(r"^\s*here(?: is|'s) (?:the|a) (?:combined |merged |final )?(?:answer|response)[^:\n]*:\s*",
+                      re.IGNORECASE)
+LOW_CONFIDENCE_THRESHOLD =float(os.getenv("LOW_CONFIDENCE_THRESHOLD", "50"))
 
 
 @dataclass
@@ -65,7 +68,7 @@ def synthesize(question: str, outputs, failed_experts: List[str]) -> SynthesisRe
         return SynthesisResult(
             answer=_concatenate(outputs), method="concatenation_fallback", model_id=model_id, error=str(exc)
         )
-    answer = re.sub(r"^\s*here is the (combined|merged) answer\s*:?\s*", "", result.content, flags=re.IGNORECASE)
+    answer = PREAMBLE.sub("", result.content)
     return SynthesisResult(
         answer=answer or result.content, method="model", model_id=model_id,
         latency_seconds=result.latency_seconds,

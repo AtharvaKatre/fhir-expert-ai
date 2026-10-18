@@ -40,7 +40,8 @@ EXPERTS: Dict[str, Expert] = {
         "(Patient, Encounter, Practitioner, Organization, Observation, DiagnosticReport).",
         model_env="EXPERT_FHIR_MODEL_ID",
         default_model_id=LEGACY_FHIR_MODEL_ID,
-        docs=("domain_docs/01_fhir_core_resources.txt", "domain_docs/04_patient_encounter_workflow.txt"),
+        docs=("domain_docs/01_fhir_core_resources.txt", "domain_docs/04_patient_encounter_workflow.txt",
+              "expert_docs/fhir_structure/practitioners_and_organizations.txt"),
         focus="FHIR resource structure, required/important elements, references between resources, "
         "and which resource type fits a use case.",
         keywords=("reference", "bundle", "patient", "encounter", "practitioner", "organization",

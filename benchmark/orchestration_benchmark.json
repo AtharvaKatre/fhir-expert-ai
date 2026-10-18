@@ -38,7 +38,15 @@
         "encounter"
       ]
     ],
-    "reference_answer": "The person is a Patient, the outpatient visit is an Encounter, and the blood pressure is an Observation. The Observation references the Patient through Observation.subject and the visit through Observation.encounter; the Encounter references the Patient through Encounter.subject."
+    "reference_answer": "The person is a Patient, the outpatient visit is an Encounter, and the blood pressure is an Observation. The Observation references the Patient through Observation.subject and the visit through Observation.encounter; the Encounter references the Patient through Encounter.subject.",
+    "must_include": [
+      [
+        "Encounter"
+      ],
+      [
+        "Observation"
+      ]
+    ]
   },
   {
     "id": "fhir-03",
@@ -83,7 +91,12 @@
         "Practitioner"
       ]
     ],
-    "reference_answer": "Use PractitionerRole: it references the Practitioner and the Organization and describes the role, specialty and locations of that practitioner at that organization. Practitioner itself does not carry the employing organization."
+    "reference_answer": "Use PractitionerRole: it references the Practitioner and the Organization and describes the role, specialty and locations of that practitioner at that organization. Practitioner itself does not carry the employing organization.",
+    "must_include": [
+      [
+        "PractitionerRole"
+      ]
+    ]
   },
   {
     "id": "clin-01",
@@ -324,7 +337,16 @@
         "cannot"
       ]
     ],
-    "reference_answer": "No. An Observation with status entered-in-error was recorded by mistake and must not be used for clinical interpretation, so the 182 mg/dL glucose value should be ignored."
+    "reference_answer": "No. An Observation with status entered-in-error was recorded by mistake and must not be used for clinical interpretation, so the 182 mg/dL glucose value should be ignored.",
+    "must_include": [
+      [
+        "not be used",
+        "should not",
+        "ignore",
+        "must not",
+        "cannot"
+      ]
+    ]
   },
   {
     "id": "pa-01",
@@ -376,7 +398,12 @@
         "authorization number"
       ]
     ],
-    "reference_answer": "A prior authorization request is a Claim with Claim.use set to preauthorization, submitted in a Bundle with supporting resources (PAS Claim/$submit). The payer decision is returned as a ClaimResponse, whose outcome and item adjudication describe the decision and whose preAuthRef carries the authorization number."
+    "reference_answer": "A prior authorization request is a Claim with Claim.use set to preauthorization, submitted in a Bundle with supporting resources (PAS Claim/$submit). The payer decision is returned as a ClaimResponse, whose outcome and item adjudication describe the decision and whose preAuthRef carries the authorization number.",
+    "must_include": [
+      [
+        "ClaimResponse"
+      ]
+    ]
   },
   {
     "id": "pa-03",
@@ -394,7 +421,17 @@
         "7 days"
       ]
     ],
-    "reference_answer": "Starting in January 2026, impacted payers must decide expedited prior authorization requests within 72 hours and standard requests within 7 calendar days."
+    "reference_answer": "Starting in January 2026, impacted payers must decide expedited prior authorization requests within 72 hours and standard requests within 7 calendar days.",
+    "must_include": [
+      [
+        "72 hours"
+      ],
+      [
+        "7 calendar days",
+        "seven calendar days",
+        "7 days"
+      ]
+    ]
   },
   {
     "id": "pa-04",
@@ -442,7 +479,16 @@
         "order-select"
       ]
     ],
-    "reference_answer": "The MRI order is a ServiceRequest. The EHR discovers whether prior authorization is required through Da Vinci Coverage Requirements Discovery (CRD), which calls the payer using CDS Hooks such as order-select or order-sign and returns coverage and documentation requirements."
+    "reference_answer": "The MRI order is a ServiceRequest. The EHR discovers whether prior authorization is required through Da Vinci Coverage Requirements Discovery (CRD), which calls the payer using CDS Hooks such as order-select or order-sign and returns coverage and documentation requirements.",
+    "must_include": [
+      [
+        "ServiceRequest"
+      ],
+      [
+        "CRD",
+        "Coverage Requirements Discovery"
+      ]
+    ]
   },
   {
     "id": "multi-02",

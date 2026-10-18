@@ -1,0 +1,30 @@
+[
+  {
+    "id": "fb-58f98fc327",
+    "question": "This MRI order needs payer approval. Which FHIR resources represent the order, and how would the EHR find out whether prior authorization is required?",
+    "expected_experts": [],
+    "key_points": [
+      [
+        "CRD"
+      ],
+      [
+        "CDS Hooks"
+      ]
+    ],
+    "source": "user_feedback",
+    "resource": {
+      "resourceType": "ServiceRequest",
+      "status": "active",
+      "intent": "order",
+      "code": {
+        "text": "MRI lumbar spine without contrast"
+      },
+      "subject": {
+        "reference": "Patient/example"
+      },
+      "encounter": {
+        "reference": "Encounter/example"
+      }
+    }
+  }
+]

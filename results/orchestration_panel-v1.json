@@ -21,7 +21,7 @@
     "router_fallback_rate": 0.0,
     "avg_latency_seconds": 30.763,
     "key_point_coverage": 0.948,
-    "pass_rate": 1.0,
+    "pass_rate": 0.933,
     "expert_calls": 26,
     "expert_failure_rate": 0.038
   },
@@ -49,7 +49,8 @@
       "synthesis_method": "model",
       "latency_seconds": 16.931,
       "answer": "The primary purpose of the FHIR Patient resource is to represent a patient. This is a widely accepted definition among healthcare interoperability specialists. The FHIR Patient resource is designed to capture essential demographic and administrative information about an individual, such as name, date of birth, and contact details. This information is crucial for healthcare providers to access and manage patient data across different healthcare systems and organizations.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "fhir-02",
@@ -76,7 +77,8 @@
       "answer": "Based on the provided FHIR R4 Domain References, the following resources represent the patient, the visit, and the measurement:\n\n* Patient: Patient resource (not shown in the provided text, but typically represented by a unique identifier, such as a patient ID)\n* Encounter: Encounter resource (e.g., Observation resource with encounterId)\n* Observation: Observation resource (e.g., with a category of \"vital-signs\" and a code of \"8480-6\" for systolic blood pressure)\n\nThe Observation resource would contain the following elements:\n\n* subject: references the Patient resource\n* encounter: references the Encounter resource\n* effective: the date and time of the measurement\n* value: the measured value (e.g., systolic blood pressure)\n* unit: the unit of measurement (e.g., mm[Hg])\n* code: the LOINC code for systolic blood pressure (8480-6)\n* interpretation: flags the result relative to normal (e.g., N for normal)\n\nThe Encounter resource would contain the following elements:\n\n* patient: references the Patient resource\n* type: the type of encounter (e.g., outpatient)\n* status: the status of the encounter (e.g., completed)\n\nThe Patient resource would contain the following elements:\n\n* identifier: a unique identifier for the patient\n* name: the patient's name\n* birthDate: the patient's birth date\n\nNote that the specific elements and their values would depend on the implementation and the specific use case.",
       "errors": [
         "Nugen API returned 504: {\"detail\":\"The inference backend did not respond within 50 seconds for model unknown. For long generations set stream to true, which returns tokens as they are produced.\"}"
-      ]
+      ],
+      "must_include_ok": true
     },
     {
       "id": "fhir-03",
@@ -102,7 +104,8 @@
       "synthesis_method": "model",
       "latency_seconds": 38.86,
       "answer": "Here is the combined answer:\n\nA DiagnosticReport and an Observation are both used to record measurements and simple assertions about a patient, but they serve different purposes and have distinct characteristics.\n\n*   A DiagnosticReport represents the findings and interpretation of diagnostic tests, such as laboratory, pathology, microbiology, and imaging results. It may include references to individual Observations, textual conclusions, and coded conclusions.\n*   An Observation is used to record a single measurement or assertion about a patient, such as vital signs, laboratory results, or other point-in-time clinical measurements.\n*   The main difference between the two is that a DiagnosticReport provides a comprehensive summary of diagnostic findings, while an Observation is a more specific and detailed record of a single measurement or assertion.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "fhir-04",
@@ -123,11 +126,12 @@
         "clinical_terminology": "ok"
       },
       "key_point_coverage": 0.667,
-      "passed": true,
+      "passed": false,
       "synthesis_method": "model",
       "latency_seconds": 18.376,
       "answer": "Here's a response based on the specialist answers:\n\nA Practitioner and the Organization they work for are related through the Practitioner resource. The Practitioner resource represents an individual who provides healthcare services, and it references the Organization resource, which represents the entity that employs or sponsors the practitioner. This relationship is established to provide context about the practitioner's affiliation and employment status.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": false
     },
     {
       "id": "clin-01",
@@ -152,7 +156,8 @@
       "synthesis_method": "model",
       "latency_seconds": 33.166,
       "answer": "Here is the combined answer:\n\nThe LOINC codes in the provided FHIR Observation resource represent measurements of blood pressure. \n\n- The LOINC code \"8480-6\" represents systolic blood pressure, and the LOINC code \"8462-4\" represents diastolic blood pressure.\n- Both measurements are reported in millimeters of mercury (mmHg).\n- The LOINC code \"85354-9\" represents a blood pressure panel.\n- The units for the blood pressure panel are \"mm[Hg]\".\n- The Observation status is \"final\", indicating that the result is complete and reliable.\n- The result is also within the reference range, as the Observation.interpretation is not provided.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "clin-02",
@@ -175,7 +180,8 @@
       "synthesis_method": "single_expert",
       "latency_seconds": 12.64,
       "answer": "Based on the provided FHIR resource, the condition is confirmed and has a clinical status of \"active\". The code systems used are SNOMED CT (http://snomed.info/sct) and ICD-10-CM (http://hl7.org/fhir/sid/icd-10-cm). The code itself is a combination of SNOMED CT 44054006 and ICD-10-CM E11.9, representing type 2 diabetes mellitus.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "clin-03",
@@ -198,7 +204,8 @@
       "synthesis_method": "single_expert",
       "latency_seconds": 19.327,
       "answer": "According to the DOMAIN REFERENCE, criticality and reaction severity are distinct concepts in AllergyIntolerance.\n\n* Criticality describes the potential for a future serious reaction, with values of low, high, or unable-to-assess.\n* Reaction severity describes the manifestations of a past reaction, with values of mild, moderate, or severe.\n\nThese two concepts are separate and distinct, and should not be confused with each other.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "clin-04",
@@ -224,7 +231,8 @@
       "synthesis_method": "model",
       "latency_seconds": 34.593,
       "answer": "Here's a consolidated answer:\n\nMedicationRequest, MedicationStatement, and MedicationAdministration differ as follows:\n\n* MedicationRequest represents an order or proposal to supply and administer a medication, often initiated by a healthcare provider.\n* MedicationStatement records that a patient is taking, has taken, or will take a medication, often as reported by the patient or through electronic health records.\n* MedicationAdministration records an actual administration event, which is an action taken to supply and administer a medication.\n\nThese resources are distinct and serve different purposes in the medication management workflow.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "clin-05",
@@ -249,7 +257,8 @@
       "synthesis_method": "model",
       "latency_seconds": 29.162,
       "answer": "Here is the combined answer:\n\nA lab Observation with status \"entered-in-error\" should not be used to interpret the patient's glucose level. According to the FHIR Observation resource structure, Observation does not provide enough information to interpret the patient's glucose level. The Observation contains a code, but it does not include clinical context or interpretation. The Observation.status value of \"entered-in-error\" indicates that the result is incorrect or invalid, and it should be ignored for clinical interpretation.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "pa-01",
@@ -274,7 +283,8 @@
       "synthesis_method": "model",
       "latency_seconds": 35.797,
       "answer": "Here is the answer:\n\nThe Da Vinci implementation guides that support prior authorization are:\n\n*   Coverage Requirements Discovery (CRD): \n    Uses CDS Hooks to ask the payer at the time of ordering or scheduling whether a service is covered, whether prior authorization is required, and whether documentation is needed.\n*   Documentation Templates and Rules (DTR): \n    Retrieves the payer's documentation requirements as a FHIR Questionnaire, often with Clinical Quality Language logic, pre-populates answers from EHR data, and lets the clinician complete the remaining items.\n*   Prior Authorization Support (PAS): \n    Lets the provider submit the authorization request as a FHIR Bundle containing a Claim and supporting resources using the Claim/$submit operation, and checks the status with Claim/$inquire.\n\nNote: The FHIR Structure Expert's answer does not provide specific information on the Da Vinci implementation guides that support prior authorization.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "pa-02",
@@ -298,7 +308,8 @@
       "synthesis_method": "single_expert",
       "latency_seconds": 14.159,
       "answer": "A prior authorization request is represented as a FHIR Bundle containing a Claim resource with a use set to preauthorization. The Bundle includes a Claim resource and supporting resources such as ServiceRequest, MedicationRequest, or DeviceRequest. The payer decision is returned as a ClaimResponse resource, which includes an outcome (queued, complete, error, or partial) and a preAuthRef element carrying the authorization number assigned by the payer.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "pa-03",
@@ -321,7 +332,8 @@
       "synthesis_method": "single_expert",
       "latency_seconds": 9.201,
       "answer": "According to the CMS Interoperability and Prior Authorization Final Rule, CMS-0057-F, impacted payers must send prior authorization decisions within:\n\n*   72 hours for expedited requests\n*   7 calendar days for standard requests",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "pa-04",
@@ -346,7 +358,8 @@
       "synthesis_method": "model",
       "latency_seconds": 22.365,
       "answer": "Here is the combined answer:\n\nThe FHIR Prior Authorization Support (PAS) guide is designed to map to the X12 278 Health Care Services Review transaction, allowing for conversion of a FHIR request to an X12 278 by an intermediary, such as a clearinghouse. This mapping enables seamless exchange of prior authorization requests and responses between FHIR and X12 278.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "multi-01",
@@ -372,7 +385,8 @@
       "synthesis_method": "model",
       "latency_seconds": 29.503,
       "answer": "Here is the combined answer:\n\nThe FHIR resource that represents the order for an MRI is the ServiceRequest resource. \n\nTo determine whether prior authorization is required, the EHR can use the CoverageEligibilityRequest resource to check the patient's coverage and the payer's requirements. The EHR can also use the Coverage resource to identify the applicable coverage and the payer's documentation requirements. Additionally, the EHR can use the CDS Hooks defined in the Coverage Requirements Discovery (CRD) implementation guide to ask the payer at the time of ordering or scheduling whether prior authorization is required.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     },
     {
       "id": "multi-02",
@@ -398,7 +412,9 @@
       "synthesis_method": "model",
       "latency_seconds": 38.864,
       "answer": "Here is the combined answer:\n\nThe code system that identifies the drug is RxNorm (http://www.nlm.nih.gov/research/umls/rxnorm). The payer process that might apply before dispensing the medication is prior authorization, as indicated by the `Claim.use` element in the related `Claim` resource.",
-      "errors": []
+      "errors": [],
+      "must_include_ok": true
     }
-  ]
+  ],
+  "rescored_at": "2026-10-18T08:21:03.052214+00:00"
 }

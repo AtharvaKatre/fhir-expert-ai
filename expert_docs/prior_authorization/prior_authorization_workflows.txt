@@ -31,3 +31,8 @@ The rule's prior authorization requirements exclude drugs, so pharmacy benefit d
 
 Interpreting a prior authorization question
 First identify the requested item from ServiceRequest, MedicationRequest or DeviceRequest and the Coverage that applies. Then determine whether authorization is required, which documentation is needed, how the request is submitted and how the decision is returned. Cite the relevant resource elements, such as Claim.use, ClaimResponse.outcome and ClaimResponse.preAuthRef. When payer-specific rules are not given, say that coverage criteria vary by payer and plan instead of guessing.
+
+Common mistakes (added after user feedback)
+- CoverageEligibilityRequest does not tell a provider whether prior authorization is required. It only asks whether coverage is active and which benefits apply. Whether a specific order needs prior authorization, and which documentation is needed, is discovered with Da Vinci Coverage Requirements Discovery (CRD), which the EHR calls through CDS Hooks such as order-select or order-sign while the clinician is ordering.
+- Coverage identifies the patient's insurance; it does not contain payer prior authorization rules.
+- The correct sequence is: ServiceRequest is created, CRD (CDS Hooks) reports whether prior authorization is required, DTR (Questionnaire) collects documentation, PAS (Claim with use = preauthorization) submits the request, and ClaimResponse returns the decision.
