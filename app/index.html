@@ -22,31 +22,32 @@
     .ok { background: #dff3e4; color: #145c2c; } .bad { background: #fde2e1; color: #8a1c17; } .warn { background: #fff2cc; color: #6b5200; }
     .muted { color: #666; font-size: 14px; }
     label { margin-right: 14px; }
+    button.small { font-size: 13px; padding: 4px 10px; margin: 0 6px 6px 0; }
+    .notice { background: #fff2cc; color: #5c4600; border: 1px solid #e6cf80; border-radius: 6px; padding: 8px 12px; }
+    .hint { color: #555; font-size: 14px; margin: -6px 0 8px; }
     @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } body { margin-top: 20px; } }
   </style>
 </head>
 <body>
   <h1>FHIR Expert Panel</h1>
-  <p class="muted">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop. Do not enter real patient data.</p>
+  <p class="muted">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop.</p>
+  <p class="notice"><strong>⚠ Do not enter real patient data.</strong> Use synthetic examples only; questions and answers are stored to improve the system.</p>
+
+  <p class="muted" style="margin-bottom:4px">Try an example (fills in the question and a matching FHIR resource):</p>
+  <div id="examples"></div>
 
   <div class="grid">
     <div>
       <h2>Question</h2>
-      <textarea id="question">This MRI order needs payer approval. Which FHIR resources represent the order, and how would the EHR find out whether prior authorization is required?</textarea>
+      <textarea id="question"></textarea>
       <p class="muted">Experts: <label><input type="checkbox" id="auto" checked> let the router decide</label></p>
       <div id="manual" class="muted" hidden></div>
       <p><button id="run" onclick="run()">Ask the panel</button> <span id="status" class="muted"></span></p>
     </div>
     <div>
-      <h2>FHIR resource (optional) <button class="secondary" type="button" onclick="document.getElementById('resource').value=''" style="font-size:13px;padding:3px 10px;vertical-align:middle">Clear</button></h2>
-      <textarea id="resource">{
-  "resourceType": "ServiceRequest",
-  "status": "active",
-  "intent": "order",
-  "code": { "text": "MRI lumbar spine without contrast" },
-  "subject": { "reference": "Patient/example" },
-  "encounter": { "reference": "Encounter/example" }
-}</textarea>
+      <h2>FHIR resource (optional) <button class="secondary small" type="button" onclick="$('resource').value=''">Clear</button></h2>
+      <p class="hint">A FHIR resource is one health record in JSON, such as an order, a lab result or a diagnosis, with a <code>resourceType</code> field. Paste one to ask about that specific record, pick an example above, or <strong>leave this empty for general questions</strong>.</p>
+      <textarea id="resource" placeholder='Leave empty for general questions, or paste e.g. {"resourceType": "Observation", ...}'></textarea>
     </div>
   </div>
 
@@ -77,6 +78,45 @@
 
 <script>
 let experts = [], lastTrace = null, rating = null;
+// Synthetic examples: each pairs a question with a matching FHIR resource (or none).
+const EXAMPLES = [
+  { label: "MRI order → prior auth",
+    question: "This MRI order needs payer approval. Which FHIR resources represent the order, and how would the EHR find out whether prior authorization is required?",
+    resource: { resourceType: "ServiceRequest", status: "active", intent: "order",
+      code: { text: "MRI lumbar spine without contrast" },
+      subject: { reference: "Patient/example" }, encounter: { reference: "Encounter/example" } } },
+  { label: "Blood pressure reading",
+    question: "What do the codes and units in this observation mean, and is the result complete?",
+    resource: { resourceType: "Observation", status: "final",
+      category: [{ coding: [{ system: "http://terminology.hl7.org/CodeSystem/observation-category", code: "vital-signs" }] }],
+      code: { coding: [{ system: "http://loinc.org", code: "85354-9", display: "Blood pressure panel" }] },
+      subject: { reference: "Patient/example" },
+      component: [
+        { code: { coding: [{ system: "http://loinc.org", code: "8480-6", display: "Systolic blood pressure" }] },
+          valueQuantity: { value: 142, unit: "mmHg", system: "http://unitsofmeasure.org", code: "mm[Hg]" } },
+        { code: { coding: [{ system: "http://loinc.org", code: "8462-4", display: "Diastolic blood pressure" }] },
+          valueQuantity: { value: 91, unit: "mmHg", system: "http://unitsofmeasure.org", code: "mm[Hg]" } } ] } },
+  { label: "Diabetes diagnosis",
+    question: "Is this a current, confirmed diagnosis, and which code systems are used?",
+    resource: { resourceType: "Condition",
+      clinicalStatus: { coding: [{ system: "http://terminology.hl7.org/CodeSystem/condition-clinical", code: "active" }] },
+      verificationStatus: { coding: [{ system: "http://terminology.hl7.org/CodeSystem/condition-ver-status", code: "confirmed" }] },
+      code: { coding: [
+        { system: "http://snomed.info/sct", code: "44054006", display: "Diabetes mellitus type 2" },
+        { system: "http://hl7.org/fhir/sid/icd-10-cm", code: "E11.9" } ] },
+      subject: { reference: "Patient/example" } } },
+  { label: "Practitioner & organization (no resource)",
+    question: "Which FHIR resource links a Practitioner to the Organization they work for?",
+    resource: null },
+  { label: "Da Vinci guides (no resource)",
+    question: "Which Da Vinci implementation guides support prior authorization, and what does each one do?",
+    resource: null },
+];
+function loadExample(i) {
+  const ex = EXAMPLES[i];
+  $("question").value = ex.question;
+  $("resource").value = ex.resource ? JSON.stringify(ex.resource, null, 2) : "";
+}
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -84,6 +124,9 @@ function checkboxes(prefix) {
   return experts.map(e => `<label><input type="checkbox" class="${prefix}" value="${e.key}"> ${esc(e.name)}${e.configured ? "" : " (not configured)"}</label>`).join("");
 }
 async function init() {
+  $("examples").innerHTML = EXAMPLES.map((ex, i) =>
+    `<button class="secondary small" type="button" onclick="loadExample(${i})">${esc(ex.label)}</button>`).join("");
+  loadExample(0);
   const data = await (await fetch("/experts")).json();
   experts = data.experts;
   $("manual").innerHTML = checkboxes("pick");
