@@ -1,6 +1,6 @@
-# Nugen Exercise Report — FHIR Resource Analyzer
+# Stage 1 Report (initial experiment): FHIR Resource Analyzer
 
-> Stage 1 report (single aligned model + grounding). The stage 2 multi-expert system, with its architecture, results and improvement loop, is documented in [README.md](README.md). The stage 1 UI is now served at `/single`, and its API at `POST /analyze` is unchanged.
+> **This is not the final deliverable.** It documents the earlier Assignment 1 experiment: one aligned model plus grounding. **The final multi-expert system (Assignment 2) is described in [README.md](README.md).** This report is kept because the stage 1 app serves as the single-model baseline in the final benchmark. Its UI is at `/single` and its API at `POST /analyze`.
 
 ## 1. Objective
 

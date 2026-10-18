@@ -11,7 +11,7 @@
 3. a **synthesis model** merges their answers,
 4. **user feedback** and a **repeatable benchmark** drive an improvement loop.
 
-It extends the original single-model FHIR Resource Analyzer (stage 1). That analyzer still works at `POST /analyze` and `/single`; see [`REPORT.md`](REPORT.md) for the stage 1 evaluation, where strict accuracy went from 26.7% to 60.0% with grounding.
+It extends the original single-model FHIR Resource Analyzer (stage 1). That analyzer still works at `POST /analyze` and `/single`; see [`STAGE1_REPORT.md`](STAGE1_REPORT.md) for that initial experiment, where strict accuracy went from 26.7% to 60.0% with grounding.
 
 ## Architecture
 
