@@ -158,7 +158,7 @@ Caveats: lexical key-point scoring is a proxy, so answers were also spot-checked
 | Routing | 👎 + "which experts should have answered" | `improve_from_feedback.py` adds router few-shot examples | Implemented |
 | Regression | 👎 + expected key points | New cases in `benchmark/feedback_cases.json`, re-run `run_benchmark.py --compare` | Implemented |
 | Expert quality | Benchmark slice per expert, with reference answers | `scripts/nugen_evaluate.py`: Nugen `benchmarks/upload` + `evaluations/create` (expert vs base model) | Implemented, needs credits |
-| Expert retraining | Captured production inference | Nugen inference capture → `auto-align` → `deployment/refresh` (same model id, no app change) | Platform path; auto-align is Enterprise-only, requested via support |
+| Expert retraining | Captured production inference | Nugen inference capture → `auto-align` → `deployment/refresh` (same model id, no app change) | **Capture enabled** on all three experts (verified via `GET /api/v3/inference/capture`); auto-align is Enterprise-only, requested from Nugen |
 
 ```bash
 python scripts/nugen_evaluate.py --dry-run                 # show per-expert benchmark slices
