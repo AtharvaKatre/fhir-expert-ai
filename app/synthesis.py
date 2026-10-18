@@ -8,9 +8,9 @@ from app import nugen_client
 from app.experts import EXPERTS
 
 DEFAULT_SYNTH_MODEL = "meta-llama/Llama-3.2-3B-Instruct"
-# Small models often prefix "Here's the combined answer:"; strip it so the UI shows only the answer.
-PREAMBLE = re.compile(r"^\s*here(?: is|'s) (?:the|a) (?:combined |merged |final )?(?:answer|response)[^:\n]*:\s*",
-                      re.IGNORECASE)
+# Small models often open with "Here's a direct answer based on ...:"; strip any short
+# "Here is/Here's ...:" first line so the UI shows only the answer.
+PREAMBLE = re.compile(r"^\s*here(?: is|'s)\b[^:\n]{0,100}:\s*", re.IGNORECASE)
 LOW_CONFIDENCE_THRESHOLD =float(os.getenv("LOW_CONFIDENCE_THRESHOLD", "50"))
 
 

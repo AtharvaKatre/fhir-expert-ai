@@ -38,7 +38,7 @@
       <p><button id="run" onclick="run()">Ask the panel</button> <span id="status" class="muted"></span></p>
     </div>
     <div>
-      <h2>FHIR resource (optional)</h2>
+      <h2>FHIR resource (optional) <button class="secondary" type="button" onclick="document.getElementById('resource').value=''" style="font-size:13px;padding:3px 10px;vertical-align:middle">Clear</button></h2>
       <textarea id="resource">{
   "resourceType": "ServiceRequest",
   "status": "active",
