@@ -5,17 +5,25 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>FHIR Expert Panel</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 40px auto; padding: 0 16px; line-height: 1.5; color: #1d1d1f; background: #fff; }
+    body { font-family: system-ui, sans-serif; max-width: 1100px; margin: 56px auto 80px; padding: 0 16px; line-height: 1.55; color: #1d1d1f; background: #fff; }
     textarea, input[type=text] { width: 100%; box-sizing: border-box; font: inherit; padding: 10px; border: 1px solid #bbb; border-radius: 6px; }
-    textarea { min-height: 180px; font-family: ui-monospace, monospace; font-size: 13px; }
-    #question { font-family: inherit; font-size: inherit; min-height: 110px; }
+    textarea { min-height: 260px; font-family: ui-monospace, monospace; font-size: 13px; }
+    #question { font-family: inherit; font-size: inherit; min-height: 170px; }
     button { padding: 9px 16px; border: 1px solid #1f5fbf; background: #1f5fbf; color: #fff; border-radius: 6px; cursor: pointer; font-weight: 600; }
     button.secondary { background: #fff; color: #1f5fbf; }
     button:disabled { opacity: .5; cursor: default; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    h1 { margin: 0 0 12px; }
+    .intro { max-width: 900px; margin: 0 0 32px; }
+    .examples { margin-bottom: 28px; }
+    .examples p { margin: 0 0 8px; }
+    .panel { border: 1px solid #e3e6ea; border-radius: 10px; padding: 24px 28px; background: #fafbfc; }
+    .panel h2 { margin: 0 0 12px; font-size: 1.25rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 36px; }
+    .actions { margin-top: 16px; }
     .experts { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
-    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-top: 20px; }
-    .card h2 { margin-top: 0; font-size: 1.15rem; }
+    .card { border: 1px solid #ddd; border-radius: 10px; padding: 24px 28px; margin-top: 32px; }
+    .card h2 { margin: 28px 0 10px; font-size: 1.15rem; }
+    .card h2:first-child { margin-top: 0; }
     .expert { border: 1px solid #ddd; border-radius: 8px; padding: 12px; font-size: 14px; }
     .expert pre, .answer { white-space: pre-wrap; margin: 0; font-family: inherit; }
     .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; background: #eee; }
@@ -23,24 +31,28 @@
     .muted { color: #666; font-size: 14px; }
     label { margin-right: 14px; }
     button.small { font-size: 13px; padding: 4px 10px; margin: 0 6px 6px 0; }
-    .hint { color: #555; font-size: 14px; margin: -6px 0 8px; }
-    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } body { margin-top: 20px; } }
+    .hint { color: #555; font-size: 14px; margin: 0 0 12px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; gap: 24px; } .panel, .card { padding: 18px 16px; } body { margin-top: 24px; } }
   </style>
 </head>
 <body>
   <h1>FHIR Expert Panel</h1>
-  <p class="muted">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop. <strong>Do not enter real patient data.</strong></p>
+  <p class="muted intro">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop. <strong>Do not enter real patient data.</strong></p>
 
-  <p class="muted" style="margin-bottom:4px">Try an example (fills in the question and a matching FHIR resource):</p>
-  <div id="examples"></div>
+  <div class="examples">
+    <p class="muted">Try an example (fills in the question and a matching FHIR resource):</p>
+    <div id="examples"></div>
+  </div>
 
-  <div class="grid">
+  <div class="panel grid">
     <div>
       <h2>Question</h2>
       <textarea id="question"></textarea>
-      <p class="muted">Experts: <label><input type="checkbox" id="auto" checked> let the router decide</label></p>
-      <div id="manual" class="muted" hidden></div>
-      <p><button id="run" onclick="run()">Ask the panel</button> <span id="status" class="muted"></span></p>
+      <div class="actions">
+        <p class="muted" style="margin:0 0 8px">Experts: <label><input type="checkbox" id="auto" checked> let the router decide</label></p>
+        <div id="manual" class="muted" hidden></div>
+        <p style="margin:12px 0 0"><button id="run" onclick="run()">Ask the panel</button> <span id="status" class="muted"></span></p>
+      </div>
     </div>
     <div>
       <h2>FHIR resource (optional) <button class="secondary small" type="button" onclick="$('resource').value=''">Clear</button></h2>
