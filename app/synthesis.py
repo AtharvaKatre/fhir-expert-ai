@@ -55,7 +55,11 @@ def synthesize(question: str, outputs, failed_experts: List[str]) -> SynthesisRe
             "content": (
                 "You merge answers from healthcare interoperability specialists into one answer. "
                 "Use only facts stated by the specialists; do not add new facts. "
-                "If specialists disagree, state the disagreement. Prefer specialists without a low-confidence flag. "
+                "Take each part of the answer from the specialist whose specialty covers it: FHIR structure "
+                "from the FHIR Structure Expert, codes and clinical meaning from the Clinical Data & Terminology "
+                "Expert, payer and prior-authorization steps from the Prior Authorization & Payer Expert. "
+                "Drop statements made outside a specialist's specialty when the responsible specialist disagrees. "
+                "Prefer specialists without a low-confidence flag. "
                 "Answer the question directly in at most 10 sentences or bullets." + missing
             ),
         },

@@ -149,6 +149,7 @@ A case passes when key-point coverage is at least 0.6 **and** every `must_includ
 | Expert panel v1 | 15 | 93.3% | 0.948 | 1 / 26 (gateway 504, isolated) | 30.8 s |
 | Expert panel v2 (+ 1 feedback case, PractitionerRole fix) | 16 | 81.2% | 0.811 | 0 / 28 | 18.0 s |
 | **Expert panel v3** (+ CRD fix) | 16 | **100%** | **0.934** | 0 / 28 | 17.2 s |
+| Expert panel v4 (+ synthesis uses each part from its specialist) | 16 | 100% | 0.929 | 0 / 28 | 15.9 s |
 
 Prior-authorization cases: stage 1 passed 0 / 4, the panel passes 4 / 4. Router recall against the expected experts is 0.933 and precision 0.733, because the router tends to add the FHIR structure expert as a second opinion. The v1 to v3 latency drop is most likely warm models and the absence of gateway timeouts, not a code change. Raw outputs are in [`results/`](results/).
 

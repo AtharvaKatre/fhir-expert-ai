@@ -1,0 +1,441 @@
+{
+  "label": "panel-v4",
+  "mode": "orchestrated",
+  "mock": false,
+  "run_at": "2026-10-18T09:31:07.221288+00:00",
+  "config": {
+    "router_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "synthesis_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "experts": {
+      "fhir_structure": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+      "clinical_terminology": "model_01m54mr4n650xyzr",
+      "prior_authorization": "model_01m54mr4n5635gse"
+    },
+    "pass_threshold": 0.6
+  },
+  "summary": {
+    "cases": 16,
+    "routing_precision": 0.733,
+    "routing_recall": 0.933,
+    "routing_exact_match": 0.4,
+    "router_fallback_rate": 0.0,
+    "avg_latency_seconds": 15.944,
+    "key_point_coverage": 0.929,
+    "pass_rate": 1.0,
+    "expert_calls": 28,
+    "expert_failure_rate": 0.0
+  },
+  "cases": [
+    {
+      "id": "fhir-01",
+      "question": "What is the primary purpose of the FHIR Patient resource?",
+      "expected_experts": [
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 9.392,
+      "answer": "The primary purpose of the FHIR Patient resource is to identify and track a patient's demographic and administrative information, such as name, date of birth, and contact details.",
+      "errors": []
+    },
+    {
+      "id": "fhir-02",
+      "question": "A blood pressure was recorded during an outpatient visit. Which FHIR resources represent the patient, the visit and the measurement, and how are they linked?",
+      "expected_experts": [
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 33.84,
+      "answer": "A blood pressure was recorded during an outpatient visit. The FHIR resources that represent the patient, visit, and measurement are:\n\n* Patient: `Patient` resource\n* Visit: `Encounter` resource\n* Measurement: `Observation` resource\n\nThese resources are linked as follows:\n- The `Observation` resource is linked to the `Encounter` resource through the `encounter` element, indicating the visit during which the measurement was taken.\n- The `Observation` resource is linked to the `Patient` resource through the `subject` element, identifying the patient who received the measurement.\n- The `Observation` resource contains a `category` element with a value of `vital-signs`, indicating that it is a vital sign measurement.\n- The `Observation` resource contains a `valueQuantity` element with a value of `mm[Hg]`, indicating that the measurement is in millimeters of mercury.\n- The `Observation` resource contains a `referenceRange` element with a low and high bound, indicating the normal range for blood pressure.\n- The `Observation` resource contains a `status` element with a value of `final`, indicating that the measurement is complete and accurate.",
+      "errors": []
+    },
+    {
+      "id": "fhir-03",
+      "question": "What is the difference between a DiagnosticReport and an Observation?",
+      "expected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 19.906,
+      "answer": "A DiagnosticReport and an Observation are two distinct resources in FHIR. \nA DiagnosticReport represents findings and interpretation from diagnostic investigations, containing references to individual Observations, textual conclusions, coded conclusions, and references to images or media. \nAn Observation, on the other hand, is a self-contained resource that represents a single measurement or assertion, often with a value, unit, and reference range. \nObservations are used to record measurements or simple assertions about a patient, device, or other subject. \nDiagnosticReports typically contain multiple Observations, which provide the raw data.",
+      "errors": []
+    },
+    {
+      "id": "fhir-04",
+      "question": "How should a Practitioner and the Organization they work for be related in FHIR?",
+      "expected_experts": [
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 12.35,
+      "answer": "A Practitioner and Organization should be related through the PractitionerRole resource, which is a part of the Practitioner resource. The Practitioner and Organization are represented in separate resources: \n- Practitioner: FHIR R4 Resource: Practitioner\n- Organization: FHIR R4 Resource: Organization.",
+      "errors": []
+    },
+    {
+      "id": "clin-01",
+      "question": "What do the LOINC codes and units in this resource mean, and is the result complete?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 0.6,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 15.797,
+      "answer": "The LOINC codes \"85354-9\" and \"8462-4\" in the Observation resource represent a blood pressure measurement. The units \"mmHg\" indicate millimeters of mercury. The result is complete, as it includes both systolic and diastolic blood pressure measurements.",
+      "errors": []
+    },
+    {
+      "id": "clin-02",
+      "question": "Is this condition a current confirmed diagnosis, and what code systems are used?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 0.8,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "single_expert",
+      "latency_seconds": 6.49,
+      "answer": "The condition is confirmed, as indicated by the \"clinicalStatus\" and \"verificationStatus\" elements, both with \"active\" and \"confirmed\" codes, respectively. The code systems used are SNOMED CT (http://snomed.info/sct) and ICD-10-CM (http://hl7.org/fhir/sid/icd-10-cm).",
+      "errors": []
+    },
+    {
+      "id": "clin-03",
+      "question": "What is the difference between criticality and reaction severity in an AllergyIntolerance?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "single_expert",
+      "latency_seconds": 11.432,
+      "answer": "In an AllergyIntolerance, criticality and reaction severity are two distinct concepts.\n\n*   Criticality refers to the potential for a future serious reaction, with values of low, high, or unable-to-assess.\n*   Reaction severity describes the manifestations of a past reaction, with values of mild, moderate, or severe.\n\nThese two concepts are different and should not be confused with each other.",
+      "errors": []
+    },
+    {
+      "id": "clin-04",
+      "question": "How do MedicationRequest, MedicationStatement and MedicationAdministration differ?",
+      "expected_experts": [
+        "clinical_terminology",
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 36.996,
+      "answer": "Here's a summary of the differences between MedicationRequest, MedicationStatement, and MedicationAdministration:\n\n*   **MedicationRequest**:\n    *   Represents an order or proposal to supply and administer a medication\n    *   Includes the reason for the request, the patient, the encounter, and the medication details\n    *   Status includes active, on-hold, cancelled, completed, entered-in-error, stopped, draft, and unknown\n    *   Medication is given by medicationCodeableConcept, often RxNorm, or by a reference to a Medication resource\n*   **MedicationStatement**:\n    *   Records that a patient is taking, has taken, or will take a medication\n    *   Includes the patient, the medication, the dosage, route, timing, and as-needed information\n    *   Not an order, but rather an assertion about the patient's medication use\n*   **MedicationAdministration**:\n    *   Records an actual administration event\n    *   Includes the patient, the medication, the dose, route, timing, and as-needed information\n    *   An action that has been taken, whereas MedicationRequest and MedicationStatement are requests or assertions about medication use",
+      "errors": []
+    },
+    {
+      "id": "clin-05",
+      "question": "This lab Observation has status entered-in-error. Can it be used to interpret the patient's glucose?",
+      "expected_experts": [
+        "clinical_terminology"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "clinical_terminology"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "clinical_terminology": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 8.45,
+      "answer": "This lab Observation with a status of \"entered-in-error\" should not be used to interpret the patient's glucose. The Observation resource itself does not provide any information about the clinical meaning of the result.",
+      "errors": []
+    },
+    {
+      "id": "pa-01",
+      "question": "Which Da Vinci implementation guides support prior authorization and what does each one do?",
+      "expected_experts": [
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "prior_authorization",
+        "fhir_structure"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "prior_authorization": "ok",
+        "fhir_structure": "ok"
+      },
+      "key_point_coverage": 0.8,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 22.772,
+      "answer": "Da Vinci implementation guides that support prior authorization are:\n\n*   Coverage Requirements Discovery (CRD): Retrieves the payer's documentation requirements as a FHIR Questionnaire, often with Clinical Quality Language logic, pre-populates answers from EHR data, and lets the clinician complete the remaining items.\n*   Documentation Templates and Rules (DTR): Retrieves the payer's documentation requirements as a FHIR Questionnaire, often with Clinical Quality Language logic, pre-populates answers from EHR data, and lets the clinician complete the remaining items.\n*   Prior Authorization Support (PAS): Lets the provider submit the authorization request as a FHIR Bundle containing a Claim and supporting resources using the Claim/$submit operation, and checks status with Claim/$inquire.",
+      "errors": []
+    },
+    {
+      "id": "pa-02",
+      "question": "How is a prior authorization request represented in FHIR and how is the payer decision returned?",
+      "expected_experts": [
+        "prior_authorization",
+        "fhir_structure"
+      ],
+      "selected_experts": [
+        "prior_authorization"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 0.5,
+      "routing_exact": false,
+      "expert_statuses": {
+        "prior_authorization": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "single_expert",
+      "latency_seconds": 8.69,
+      "answer": "A prior authorization request is represented as a FHIR Bundle containing a Claim resource with a use element set to \"preauthorization\" (Claim.use = preauthorization). The payer decision is returned as a ClaimResponse resource, which includes an outcome element (ClaimResponse.outcome) indicating the result of the authorization request (e.g., approved, denied, pending). The preAuthRef element (ClaimResponse.preAuthRef) carries the authorization number assigned by the payer.",
+      "errors": []
+    },
+    {
+      "id": "pa-03",
+      "question": "Under CMS-0057-F, how quickly must impacted payers decide expedited and standard prior authorization requests?",
+      "expected_experts": [
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "prior_authorization"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "prior_authorization": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "single_expert",
+      "latency_seconds": 4.613,
+      "answer": "Impacted payers must send prior authorization decisions within 72 hours for expedited requests and within 7 calendar days for standard requests.",
+      "errors": []
+    },
+    {
+      "id": "pa-04",
+      "question": "What is the relationship between the FHIR PAS guide and the X12 278 transaction?",
+      "expected_experts": [
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "prior_authorization"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 1.0,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "prior_authorization": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 14.528,
+      "answer": "The FHIR Prior Authorization Support (PAS) guide is designed to map to the X12 278 Health Care Services Review transaction. An intermediary, such as a clearinghouse, can convert a FHIR request to an X12 278 by mapping the FHIR Bundle to the X12 278 transaction, allowing for seamless integration between the FHIR API and the HIPAA transaction requirements.",
+      "errors": []
+    },
+    {
+      "id": "multi-01",
+      "question": "A clinician orders an MRI. Which FHIR resource represents the order, and how would the EHR discover whether prior authorization is required?",
+      "expected_experts": [
+        "fhir_structure",
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "prior_authorization"
+      ],
+      "route_method": "model",
+      "routing_precision": 1.0,
+      "routing_recall": 1.0,
+      "routing_exact": true,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "prior_authorization": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 13.324,
+      "answer": "The FHIR resource that represents the order for an MRI is the ServiceRequest resource. The EHR would discover whether prior authorization is required through the Da Vinci Coverage Requirements Discovery (CRD) CDS Hooks, such as order-select or order-sign, which are called at the time of ordering or scheduling.",
+      "errors": []
+    },
+    {
+      "id": "multi-02",
+      "question": "For this medication order, which code system identifies the drug and what payer process might apply before it is dispensed?",
+      "expected_experts": [
+        "clinical_terminology",
+        "prior_authorization"
+      ],
+      "selected_experts": [
+        "fhir_structure",
+        "prior_authorization"
+      ],
+      "route_method": "model",
+      "routing_precision": 0.5,
+      "routing_recall": 0.5,
+      "routing_exact": false,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "prior_authorization": "ok"
+      },
+      "key_point_coverage": 0.667,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 20.676,
+      "answer": "The medication code system is identified by the'system' attribute in the 'coding' element of the'medicationCodeableConcept' element, which is 'http://www.nlm.nih.gov/research/umls/rxnorm' for RxNorm. This system standardizes medication names and codes. The payer process that might apply before dispensing the medication depends on the specific payer and plan, and can be identified using the 'Coverage' resource to determine the patient's insurance coverage and the 'CoverageEligibilityRequest' resource to determine active coverage and applicable benefits.",
+      "errors": []
+    },
+    {
+      "id": "fb-58f98fc327",
+      "question": "This MRI order needs payer approval. Which FHIR resources represent the order, and how would the EHR find out whether prior authorization is required?",
+      "expected_experts": [],
+      "selected_experts": [
+        "fhir_structure",
+        "prior_authorization"
+      ],
+      "route_method": "model",
+      "routing_precision": null,
+      "routing_recall": null,
+      "routing_exact": null,
+      "expert_statuses": {
+        "fhir_structure": "ok",
+        "prior_authorization": "ok"
+      },
+      "key_point_coverage": 1.0,
+      "must_include_ok": true,
+      "passed": true,
+      "synthesis_method": "model",
+      "latency_seconds": 15.853,
+      "answer": "The ServiceRequest resource represents the MRI order. To determine whether prior authorization is required, the EHR would use the CoverageRequirementsDiscovery (CRD) resource, which is a CDS Hooks service that reports whether prior authorization is required. The EHR would call CRD through CDS Hooks such as order-select or order-sign while the clinician is ordering.",
+      "errors": []
+    }
+  ]
+}

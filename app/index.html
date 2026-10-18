@@ -30,7 +30,12 @@
     .card h2 { margin: 28px 0 10px; font-size: 1.15rem; }
     .card h2:first-child { margin-top: 0; }
     .expert { border: 1px solid #ddd; border-radius: 8px; padding: 12px; font-size: 14px; }
-    .expert pre, .answer { white-space: pre-wrap; margin: 0; font-family: inherit; }
+    .md p { margin: 0 0 10px; }
+    .md ul, .md ol { margin: 0 0 10px; padding-left: 22px; }
+    .md li { margin: 2px 0; }
+    .md > :last-child { margin-bottom: 0; }
+    .md code { font-size: 0.9em; background: #f1f3f5; padding: 0 4px; border-radius: 4px; }
+    .expert pre { white-space: pre-wrap; margin: 0; font-family: inherit; }
     .badge { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 12px; font-weight: 600; background: #eee; }
     .ok { background: #dff3e4; color: #145c2c; } .bad { background: #fde2e1; color: #8a1c17; } .warn { background: #fff2cc; color: #6b5200; }
     .muted { color: #666; font-size: 14px; }
@@ -87,7 +92,7 @@
 
   <div class="card" id="result" hidden>
     <h2>Answer</h2>
-    <div class="answer" id="answer"></div>
+    <div class="answer md" id="answer"></div>
     <p class="muted" id="meta"></p>
     <h2>Route</h2>
     <p class="muted" id="route"></p>
@@ -146,6 +151,27 @@ const EXAMPLES = [
     question: "Which Da Vinci implementation guides support prior authorization, and what does each one do?",
     resource: null },
 ];
+// Minimal Markdown for model output: paragraphs, "-"/"*" bullets, numbered lists, **bold**, `code`.
+// Input is HTML-escaped first, so model text can never inject markup.
+function md(text) {
+  const inline = s => s.replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  const out = []; let list = null, para = [];
+  const flushPara = () => { if (para.length) { out.push(`<p>${inline(para.join(" "))}</p>`); para = []; } };
+  const closeList = () => { if (list) { out.push(`</${list}>`); list = null; } };
+  for (const raw of esc(text).split(/\r?\n/)) {
+    const line = raw.trim();
+    const bullet = line.match(/^[*\-•]\s+(.*)$/), numbered = line.match(/^\d+[.)]\s+(.*)$/);
+    if (bullet || numbered) {
+      flushPara();
+      const tag = bullet ? "ul" : "ol";
+      if (list !== tag) { closeList(); out.push(`<${tag}>`); list = tag; }
+      out.push(`<li>${inline((bullet || numbered)[1])}</li>`);
+    } else if (!line) { flushPara(); closeList(); }
+    else { closeList(); para.push(line); }
+  }
+  flushPara(); closeList();
+  return out.join("");
+}
 function loadExample(i) {
   const ex = EXAMPLES[i];
   $("question").value = ex.question;
@@ -201,7 +227,7 @@ function render(t, failed) {
   $("fbKeyPoints").value = ""; $("fbComment").value = "";
   document.querySelectorAll(".fb").forEach(c => c.checked = false);
   $("result").hidden = false; $("feedback").hidden = false;
-  $("answer").textContent = failed ? "All selected experts failed." : t.answer;
+  $("answer").innerHTML = failed ? "All selected experts failed." : md(t.answer);
   const s = t.synthesis || {};
   $("meta").textContent = `Synthesis: ${s.method || "n/a"}${s.error ? " (" + s.error.slice(0, 120) + ")" : ""} · total ${t.total_latency_seconds}s` + (t.mock ? " · MOCK MODE" : "");
   const r = t.route;
@@ -211,7 +237,7 @@ function render(t, failed) {
     <div class="expert">
       <strong>${esc(e.name)}</strong> <span class="badge ${e.status === "ok" ? "ok" : "bad"}">${esc(e.status)}</span><br>
       <span class="muted">${esc(e.model_id || "no model id")}${e.latency_seconds != null ? " · " + e.latency_seconds + "s" : ""}${e.confidence != null ? " · confidence " + Math.round(e.confidence) : ""}</span>
-      <pre>${esc(e.status === "ok" ? e.answer : e.error)}</pre>
+      ${e.status === "ok" ? `<div class="md">${md(e.answer)}</div>` : `<pre>${esc(e.error)}</pre>`}
     </div>`).join("");
 }
 
