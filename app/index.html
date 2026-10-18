@@ -14,6 +14,11 @@
     button:disabled { opacity: .5; cursor: default; }
     h1 { margin: 0 0 12px; }
     .intro { max-width: 900px; margin: 0 0 32px; }
+    .guide { max-width: 900px; margin: -16px 0 32px; font-size: 15px; }
+    .guide summary { cursor: pointer; color: #1f5fbf; font-weight: 600; }
+    .guide-body { border: 1px solid #e3e6ea; border-radius: 10px; background: #fafbfc; padding: 4px 24px 12px; margin-top: 10px; }
+    .guide-body h3 { font-size: 1rem; margin: 16px 0 4px; }
+    .guide-body p, .guide-body ul { margin: 0 0 8px; }
     .examples { margin-bottom: 28px; }
     .examples p { margin: 0 0 8px; }
     .panel { border: 1px solid #e3e6ea; border-radius: 10px; padding: 24px 28px; background: #fafbfc; }
@@ -38,6 +43,25 @@
 <body>
   <h1>FHIR Expert Panel</h1>
   <p class="muted intro">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop. <strong>Do not enter real patient data.</strong></p>
+
+  <details class="guide">
+    <summary>ⓘ New to FHIR or prior authorization? Read the plain-English guide</summary>
+    <div class="guide-body">
+      <h3>The problem</h3>
+      <p><strong>Prior authorization</strong> is insurance pre-approval: before an expensive scan or drug, the insurer must approve it or may not pay. It is slow, often done by fax and phone, and delays care. A US rule (<strong>CMS-0057-F</strong>) now requires insurers to handle it electronically, with decisions within 72 hours for urgent and 7 days for standard requests, from 2026–2027.</p>
+      <h3>Key terms</h3>
+      <ul>
+        <li><strong>FHIR</strong>: a standard format for health records, so hospital and insurer systems can exchange data. Think of it as a shared set of digital forms.</li>
+        <li><strong>Resource</strong>: one type of form, filled in as JSON. <em>Patient</em> is who the person is, <em>ServiceRequest</em> is a doctor's order (e.g. "do an MRI"), <em>Observation</em> is a measurement (e.g. blood pressure), and <em>Condition</em> is a diagnosis.</li>
+        <li><strong>Medical codes</strong> (LOINC, SNOMED CT, RxNorm, ICD-10): standard dictionaries, so "blood pressure" or "type 2 diabetes" means the same thing in every system.</li>
+        <li><strong>Da Vinci CRD → DTR → PAS</strong>: the industry standard for electronic prior authorization, in three steps. <em>Does this order need approval?</em> → <em>What paperwork is needed?</em> → <em>Submit the request and get the decision.</em></li>
+      </ul>
+      <h3>How this app works</h3>
+      <p>Answering these questions needs three kinds of knowledge: the data format, the medical meaning and the insurer's rules. So a <strong>router model</strong> sends each question to the right <strong>expert models</strong> (FHIR structure, clinical terminology, prior authorization), each trained on its own domain on Nugen. They answer in parallel, and a <strong>synthesis model</strong> combines their answers. Your 👍 / 👎 feedback is used to find and fix mistakes, and a benchmark checks that each fix really helps.</p>
+      <h3>How to try it</h3>
+      <p>Click an example below, then <strong>Ask the panel</strong>. Answers take about 10–30 seconds. Open the expert cards to see what each expert said, then rate the answer.</p>
+    </div>
+  </details>
 
   <div class="examples">
     <p class="muted">Try an example (fills in the question and a matching FHIR resource):</p>
