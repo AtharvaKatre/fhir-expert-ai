@@ -23,15 +23,13 @@
     .muted { color: #666; font-size: 14px; }
     label { margin-right: 14px; }
     button.small { font-size: 13px; padding: 4px 10px; margin: 0 6px 6px 0; }
-    .notice { background: #fff2cc; color: #5c4600; border: 1px solid #e6cf80; border-radius: 6px; padding: 8px 12px; }
     .hint { color: #555; font-size: 14px; margin: -6px 0 8px; }
     @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } body { margin-top: 20px; } }
   </style>
 </head>
 <body>
   <h1>FHIR Expert Panel</h1>
-  <p class="muted">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop.</p>
-  <p class="notice"><strong>⚠ Do not enter real patient data.</strong> Use synthetic examples only; questions and answers are stored to improve the system.</p>
+  <p class="muted">Prior authorization and FHIR questions, answered by a fleet of experts: a mother model routes each question to Nugen domain-aligned expert models (FHIR structure, clinical terminology, prior authorization), which run in parallel, and a synthesis model combines their answers. Your ratings drive the improvement loop. <strong>Do not enter real patient data.</strong></p>
 
   <p class="muted" style="margin-bottom:4px">Try an example (fills in the question and a matching FHIR resource):</p>
   <div id="examples"></div>
