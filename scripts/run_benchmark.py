@@ -86,9 +86,8 @@ def run_case(case, mode):
         trace = {"route": {"experts": decision.experts, "method": decision.method, "error": decision.error},
                  "answer": "", "experts": []}
     else:
-        override = ["fhir_structure"] if mode == "single_fhir_expert" else None
         try:
-            trace = orchestrate(case["question"], resource, override)
+            trace = orchestrate(case["question"], resource)
         except AllExpertsFailed as exc:
             trace = {**exc.trace, "answer": ""}
     latency = round(time.perf_counter() - start, 3)
@@ -167,7 +166,7 @@ def rescore(path: Path, cases):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--label", default=datetime.now().strftime("%Y%m%d-%H%M%S"))
-    parser.add_argument("--mode", choices=["orchestrated", "stage1_single_model", "single_fhir_expert", "routing_only"],
+    parser.add_argument("--mode", choices=["orchestrated", "stage1_single_model", "routing_only"],
                         default="orchestrated")
     parser.add_argument("--cases", nargs="*", default=DEFAULT_CASE_FILES)
     parser.add_argument("--limit", type=int)

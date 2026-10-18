@@ -1,5 +1,6 @@
 import json
 import os
+import secrets
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
@@ -298,7 +299,7 @@ def feedback_summary():
 def export_feedback(x_admin_token: Optional[str] = Header(default=None)):
     """Download raw feedback JSONL for scripts/improve_from_feedback.py. Requires ADMIN_TOKEN."""
     admin_token = os.getenv("ADMIN_TOKEN")
-    if not admin_token or x_admin_token != admin_token:
+    if not admin_token or not secrets.compare_digest(x_admin_token or "", admin_token):
         raise HTTPException(status_code=403, detail="admin token required")
     path = feedback_store.feedback_path()
     return path.read_text(encoding="utf-8") if path.exists() else ""

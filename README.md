@@ -1,5 +1,7 @@
 # FHIR Expert Panel (Nugen multi-expert system)
 
+**Live app:** https://fhir-expert-ai.onrender.com (free tier: the first request after idle can take about a minute to wake up)
+
 **Problem.** Prior authorization is one of the most costly bottlenecks in US healthcare. Clinicians and payer-operations staff must work out which FHIR data describes an order, what clinical codes mean, and what the payer requires. CMS-0057-F turns this into a FHIR API workflow starting in 2026–2027. A single general model blurs these three areas. They need different expertise.
 
 **Solution.** A **mother/router model** delegates each question to a fleet of **Nugen domain-aligned expert models**, combines their expertise, and improves over time:
@@ -24,7 +26,8 @@ Browser (/)  ──POST /orchestrate──►  FastAPI
               ▼                        ▼                        ▼   per-expert timeout/isolation
    FHIR Structure Expert   Clinical Data & Terminology   Prior Authorization & Payer
    (aligned model #1)      Expert (aligned model #2)     Expert (aligned model #3)
-   + docs 01, 04           + docs 02, 03, terminology    + doc 05, PA workflows
+   + docs 01, 04,          + docs 02, 03, terminology    + doc 05, PA workflows
+     practitioners
               └────────────────────────┼────────────────────────┘
                                        ▼
                          Synthesis model (base Llama-3.2-3B)
@@ -69,10 +72,11 @@ app/
   mock_nugen.py      Offline mock, used only when NUGEN_MOCK=1
   index.html         Multi-expert UI     single.html  Stage 1 UI
 domain_docs/         Stage 1 corpus (already uploaded to Nugen)
-expert_docs/         New alignment docs (≥500 words each, as the upload API requires)
-benchmark/           orchestration_benchmark.json (15 cases) + feedback_cases.json (generated)
+expert_docs/         Expert alignment + grounding docs (alignment uploads need ≥500 words each)
+benchmark/           orchestration_benchmark.json (15 cases) + feedback_cases.json (from user feedback)
 scripts/             provision_experts.py, run_benchmark.py, improve_from_feedback.py, nugen_evaluate.py
-data/router_examples.json
+data/                router_examples.json (router few-shot), feedback_live.jsonl (exported live feedback)
+results/             Benchmark outputs (stage 1 baseline, panel v1–v3) and stage 1 results
 tests/               test_app.py (stage 1), test_orchestrator.py
 ```
 
@@ -133,7 +137,7 @@ python scripts/improve_from_feedback.py --feedback feedback.jsonl
 python scripts/run_benchmark.py --label panel-v2 --compare results/orchestration_panel-v1.json
 ```
 
-Metrics: routing precision, recall and exact match against `expected_experts`; key-point coverage of the final answer; pass rate (coverage ≥ 0.6); expert failure rate; router fallback rate; latency.
+Metrics: routing precision, recall and exact match against `expected_experts`; key-point coverage of the final answer; pass rate; expert failure rate; router fallback rate; latency.
 
 ### Results (live Nugen models)
 
@@ -144,7 +148,7 @@ A case passes when key-point coverage is at least 0.6 **and** every `must_includ
 | Stage 1 app (one aligned model + grounding) | 15 | 46.7% | 0.594 | 0 / 15 | 7.3 s |
 | Expert panel v1 | 15 | 93.3% | 0.948 | 1 / 26 (gateway 504, isolated) | 30.8 s |
 | Expert panel v2 (+ 1 feedback case, PractitionerRole fix) | 16 | 81.2% | 0.811 | 0 / 28 | 18.0 s |
-| **Expert panel v3** (+ CRD fix) | 16 | **100%** | **0.934** | 0 / 30 | 17.2 s |
+| **Expert panel v3** (+ CRD fix) | 16 | **100%** | **0.934** | 0 / 28 | 17.2 s |
 
 Prior-authorization cases: stage 1 passed 0 / 4, the panel passes 4 / 4. Router recall against the expected experts is 0.933 and precision 0.733, because the router tends to add the FHIR structure expert as a second opinion. The v1 to v3 latency drop is most likely warm models and the absence of gateway timeouts, not a code change. Raw outputs are in [`results/`](results/).
 
@@ -166,7 +170,7 @@ Caveats: 16 cases is small, and single runs at temperature 0.2 vary by about one
 |---|---|---|---|
 | Routing | 👎 + "which experts should have answered" | `improve_from_feedback.py` adds router few-shot examples | Implemented |
 | Regression | 👎 + expected key points | New cases in `benchmark/feedback_cases.json`, re-run `run_benchmark.py --compare` | Implemented |
-| Expert quality | Benchmark slice per expert, with reference answers | `scripts/nugen_evaluate.py`: Nugen `benchmarks/upload` + `evaluations/create` (expert vs base model) | Implemented, needs credits |
+| Expert quality | Benchmark slice per expert, with reference answers | `scripts/nugen_evaluate.py`: Nugen `benchmarks/upload` + `evaluations/create` (expert vs base model) | Implemented, not yet run |
 | Expert retraining | Captured production inference | Nugen inference capture → `auto-align` → `deployment/refresh` (same model id, no app change) | **Capture enabled** on all three experts (verified via `GET /api/v3/inference/capture`); auto-align is Enterprise-only, requested from Nugen |
 
 ```bash
@@ -176,12 +180,11 @@ python scripts/nugen_evaluate.py                           # upload + eval-compa
 
 ## Deploy (Render, Docker)
 
-1. Push this repo to GitHub (public).
-2. Render → **New → Blueprint** → select the repo. [`render.yaml`](render.yaml) defines the service.
-3. Enter `NUGEN_API_KEY`, `EXPERT_CLINICAL_MODEL_ID` and `EXPERT_PRIOR_AUTH_MODEL_ID` when prompted.
-4. Check `https://<service>.onrender.com/health`.
+1. Render → **New → Web Service** → select this repo. Runtime **Docker**, instance **Free**, health check path `/health`. Alternatively, **New → Blueprint** uses [`render.yaml`](render.yaml).
+2. Add environment variables: `NUGEN_API_KEY`, `EXPERT_CLINICAL_MODEL_ID`, `EXPERT_PRIOR_AUTH_MODEL_ID`, `ADMIN_TOKEN`.
+3. Every push to `main` redeploys. Check `https://<service>.onrender.com/health`: all experts should show `"configured": true`.
 
-Any Docker host also works: `docker build -t fhir-expert-panel . && docker run -p 8000:8000 --env-file .env fhir-expert-panel`. The container honours `$PORT`.
+Any Docker host also works: `docker build -t fhir-expert-ai . && docker run -p 8000:8000 --env-file .env fhir-expert-ai`. The container honours `$PORT`.
 
 ## API
 
@@ -192,7 +195,7 @@ Any Docker host also works: `docker build -t fhir-expert-panel . && docker run -
 
 ## Limitations
 
-- Feedback is stored in a JSONL file. Free hosting tiers have ephemeral disks, so export feedback regularly or point `FEEDBACK_PATH` at a persistent volume.
+- Feedback is stored in a JSONL file. Render's free tier wipes the disk on every redeploy, so export feedback (`/feedback/export`) before pushing, or point `FEEDBACK_PATH` at a persistent volume.
 - Key-point scoring is a lexical proxy for correctness. Nugen's `POST /evaluations/create` (LLM-judged) can complement it for the per-expert models.
 - The router and synthesizer are 3B base models. Their errors are bounded by the fallbacks and measured by the benchmark.
 - This is not a FHIR validator and not clinical advice. Do not enter real patient data.

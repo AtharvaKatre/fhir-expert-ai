@@ -1,7 +1,7 @@
 # Render Blueprint: New > Blueprint > select this repo. Secrets marked sync:false are entered in the dashboard.
 services:
   - type: web
-    name: fhir-expert-panel
+    name: fhir-expert-ai
     runtime: docker
     plan: free
     healthCheckPath: /health

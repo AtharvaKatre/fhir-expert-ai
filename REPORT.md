@@ -1,5 +1,7 @@
 # Nugen Exercise Report — FHIR Resource Analyzer
 
+> Stage 1 report (single aligned model + grounding). The stage 2 multi-expert system, with its architecture, results and improvement loop, is documented in [README.md](README.md). The stage 1 UI is now served at `/single`, and its API at `POST /analyze` is unchanged.
+
 ## 1. Objective
 
 The goal of this exercise was to create a domain-aligned model on the Nugen platform, evaluate its behavior through inference requests, and build a small application around the resulting model.
