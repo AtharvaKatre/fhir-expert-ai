@@ -1,0 +1,37 @@
+[
+  {
+    "sample_num": 1,
+    "instruction": "What is the primary purpose of the FHIR Patient resource?",
+    "response": "The Patient resource holds demographic and administrative information about a person receiving care, such as identifiers, name, gender, birth date and contact details. It is the 'who' that other clinical resources reference."
+  },
+  {
+    "sample_num": 2,
+    "instruction": "A blood pressure was recorded during an outpatient visit. Which FHIR resources represent the patient, the visit and the measurement, and how are they linked?",
+    "response": "The person is a Patient, the outpatient visit is an Encounter, and the blood pressure is an Observation. The Observation references the Patient through Observation.subject and the visit through Observation.encounter; the Encounter references the Patient through Encounter.subject."
+  },
+  {
+    "sample_num": 3,
+    "instruction": "What is the difference between a DiagnosticReport and an Observation?",
+    "response": "An Observation is a single measurement or finding. A DiagnosticReport represents the overall report of a diagnostic investigation, including the clinical interpretation or conclusion, and references its individual Observation resources through DiagnosticReport.result."
+  },
+  {
+    "sample_num": 4,
+    "instruction": "How should a Practitioner and the Organization they work for be related in FHIR?",
+    "response": "Use PractitionerRole: it references the Practitioner and the Organization and describes the role, specialty and locations of that practitioner at that organization. Practitioner itself does not carry the employing organization."
+  },
+  {
+    "sample_num": 5,
+    "instruction": "How do MedicationRequest, MedicationStatement and MedicationAdministration differ?",
+    "response": "MedicationRequest is an order or prescription for a medication. MedicationStatement records that the patient is taking or has taken a medication, often as reported. MedicationAdministration records an actual administration event."
+  },
+  {
+    "sample_num": 6,
+    "instruction": "How is a prior authorization request represented in FHIR and how is the payer decision returned?",
+    "response": "A prior authorization request is a Claim with Claim.use set to preauthorization, submitted in a Bundle with supporting resources (PAS Claim/$submit). The payer decision is returned as a ClaimResponse, whose outcome and item adjudication describe the decision and whose preAuthRef carries the authorization number."
+  },
+  {
+    "sample_num": 7,
+    "instruction": "A clinician orders an MRI. Which FHIR resource represents the order, and how would the EHR discover whether prior authorization is required?",
+    "response": "The MRI order is a ServiceRequest. The EHR discovers whether prior authorization is required through Da Vinci Coverage Requirements Discovery (CRD), which calls the payer using CDS Hooks such as order-select or order-sign and returns coverage and documentation requirements."
+  }
+]

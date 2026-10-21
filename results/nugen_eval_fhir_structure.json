@@ -1,0 +1,72 @@
+{
+  "evaluation_id": "evaluation_01m5egnyg3qe0gqf",
+  "metrics": null,
+  "raw_responses_count": 0,
+  "method": "eval-compare",
+  "baseline_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+  "model": {
+    "metrics": {
+      "binary_correctness_max": 1.0,
+      "binary_correctness_min": 0.0,
+      "binary_correctness_std": 0.49487165930539345,
+      "response_relevance_max": 1.0,
+      "response_relevance_min": 0.5,
+      "response_relevance_std": 0.18844151368961315,
+      "binary_correctness_mean": 0.42857142857142855,
+      "response_relevance_mean": 0.6142857142857142,
+      "binary_correctness_valid_count": 7,
+      "response_relevance_valid_count": 7
+    },
+    "model_id": "model_fhir-healthcare-reasoning_alignment_01m1tybce6bsr93",
+    "generation_usage": {
+      "failed_items": 0,
+      "total_tokens": 2233,
+      "prompt_tokens": 384,
+      "completion_tokens": 1849
+    },
+    "raw_answers_count": 7
+  },
+  "baseline": {
+    "metrics": {
+      "binary_correctness_max": 1.0,
+      "binary_correctness_min": 0.0,
+      "binary_correctness_std": 0.4517539514526257,
+      "response_relevance_max": 1.0,
+      "response_relevance_min": 0.5,
+      "response_relevance_std": 0.191662969499982,
+      "binary_correctness_mean": 0.2857142857142857,
+      "response_relevance_mean": 0.6571428571428571,
+      "binary_correctness_valid_count": 7,
+      "response_relevance_valid_count": 7
+    },
+    "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "generation_usage": {
+      "failed_items": 0,
+      "total_tokens": 3340,
+      "prompt_tokens": 384,
+      "completion_tokens": 2956
+    },
+    "raw_answers_count": 7
+  },
+  "comparison": {
+    "metrics": [
+      {
+        "base": 0.2857,
+        "metric": "binary_correctness_mean",
+        "evaluated": 0.4286,
+        "improvement_%": 50.0
+      },
+      {
+        "base": 0.6571,
+        "metric": "response_relevance_mean",
+        "evaluated": 0.6143,
+        "improvement_%": -6.52
+      }
+    ],
+    "summary": {
+      "avg_improvement": 21.74,
+      "max_improvement": 50.0,
+      "min_improvement": -6.52
+    }
+  }
+}

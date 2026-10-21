@@ -1,0 +1,72 @@
+{
+  "evaluation_id": "evaluation_01m5egtng08n8jj0",
+  "metrics": null,
+  "raw_responses_count": 0,
+  "method": "eval-compare",
+  "baseline_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+  "model": {
+    "metrics": {
+      "binary_correctness_max": 1.0,
+      "binary_correctness_min": 0.0,
+      "binary_correctness_std": 0.4517539514526256,
+      "response_relevance_max": 1.0,
+      "response_relevance_min": 0.5,
+      "response_relevance_std": 0.2,
+      "binary_correctness_mean": 0.7142857142857143,
+      "response_relevance_mean": 0.8,
+      "binary_correctness_valid_count": 7,
+      "response_relevance_valid_count": 7
+    },
+    "model_id": "model_01m54mr4n650xyzr",
+    "generation_usage": {
+      "failed_items": 0,
+      "total_tokens": 3840,
+      "prompt_tokens": 1169,
+      "completion_tokens": 2671
+    },
+    "raw_answers_count": 7
+  },
+  "baseline": {
+    "metrics": {
+      "binary_correctness_max": 1.0,
+      "binary_correctness_min": 0.0,
+      "binary_correctness_std": 0.49487165930539345,
+      "response_relevance_max": 1.0,
+      "response_relevance_min": 0.5,
+      "response_relevance_std": 0.2321153829895989,
+      "binary_correctness_mean": 0.42857142857142855,
+      "response_relevance_mean": 0.7428571428571429,
+      "binary_correctness_valid_count": 7,
+      "response_relevance_valid_count": 7
+    },
+    "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "generation_usage": {
+      "failed_items": 0,
+      "total_tokens": 3280,
+      "prompt_tokens": 1169,
+      "completion_tokens": 2111
+    },
+    "raw_answers_count": 7
+  },
+  "comparison": {
+    "metrics": [
+      {
+        "base": 0.4286,
+        "metric": "binary_correctness_mean",
+        "evaluated": 0.7143,
+        "improvement_%": 66.67
+      },
+      {
+        "base": 0.7429,
+        "metric": "response_relevance_mean",
+        "evaluated": 0.8,
+        "improvement_%": 7.69
+      }
+    ],
+    "summary": {
+      "avg_improvement": 37.18,
+      "max_improvement": 66.67,
+      "min_improvement": 7.69
+    }
+  }
+}

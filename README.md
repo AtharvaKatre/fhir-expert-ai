@@ -167,13 +167,25 @@ Neither fix retrained a model. Both are inference-time grounding changes, so the
 
 Caveats: 16 cases is small, and single runs at temperature 0.2 vary by about one case (for example `fhir-01` dipped in v2 on wording alone). Lexical scoring is a proxy, so answers were also checked by hand. I wrote the grounding docs and benchmark, so they share vocabulary.
 
+### Per-expert evaluation on Nugen (alignment alone)
+
+`scripts/nugen_evaluate.py` uploaded each expert's benchmark slice (question plus reference answer) and ran Nugen's LLM-judged `eval-compare` of the aligned expert against its base model, **without the reference documents** the panel adds at inference time. This isolates what alignment contributes.
+
+| Expert | Judged correct: aligned vs base | Relevance: aligned vs base |
+|---|---:|---:|
+| Clinical terminology | **5/7 vs 3/7** (0.71 vs 0.43) | 0.80 vs 0.74 |
+| FHIR structure | 3/7 vs 2/7 (0.43 vs 0.29) | 0.61 vs 0.66 |
+| Prior authorization | 1/6 vs 1/6 (0.17 vs 0.17) | 0.48 vs 0.48 |
+
+**Finding:** alignment clearly helped the clinical expert and helped the FHIR expert a little, but **added nothing for the prior-authorization expert**. A direct spot check confirmed this: without grounding, the prior-auth expert gave a word-for-word identical answer to base Llama on the CMS-0057-F question, and both hallucinated on the Da Vinci question. Its training corpus was the smallest (two documents, about 1,000 words). So the panel's 4/4 on prior-authorization cases comes from **routing plus inference-time grounding**, not from alignment. The next step is a larger prior-auth corpus (CMS rule text, Da Vinci implementation guides), then re-aligning (or auto-align to a target score) and re-running this evaluation. Caveats: 6–7 questions per expert, single runs. Raw results: `results/nugen_eval_*.json`.
+
 ### How the system improves over time
 
 | Loop | Signal | Mechanism | Status |
 |---|---|---|---|
 | Routing | 👎 + "which experts should have answered" | `improve_from_feedback.py` adds router few-shot examples | Implemented |
 | Regression | 👎 + expected key points | New cases in `benchmark/feedback_cases.json`, re-run `run_benchmark.py --compare` | Implemented |
-| Expert quality | Benchmark slice per expert, with reference answers | `scripts/nugen_evaluate.py`: Nugen `benchmarks/upload` + `evaluations/create` (expert vs base model) | Implemented, not yet run |
+| Expert quality | Benchmark slice per expert, with reference answers | `scripts/nugen_evaluate.py`: Nugen `benchmarks/upload` + `evaluations/create` (expert vs base model) | Run: see *Per-expert evaluation on Nugen* above |
 | Expert retraining | Captured production inference | Nugen inference capture → `auto-align` → `deployment/refresh` (same model id, no app change) | **Capture enabled** on all three experts (verified via `GET /api/v3/inference/capture`); auto-align is Enterprise-only, requested from Nugen |
 
 ```bash

@@ -1,0 +1,37 @@
+[
+  {
+    "sample_num": 1,
+    "instruction": "What is the difference between a DiagnosticReport and an Observation?",
+    "response": "An Observation is a single measurement or finding. A DiagnosticReport represents the overall report of a diagnostic investigation, including the clinical interpretation or conclusion, and references its individual Observation resources through DiagnosticReport.result."
+  },
+  {
+    "sample_num": 2,
+    "instruction": "What do the LOINC codes and units in this resource mean, and is the result complete?\n\nFHIR resource:\n{\n  \"resourceType\": \"Observation\",\n  \"status\": \"final\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"vital-signs\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"85354-9\",\n        \"display\": \"Blood pressure panel\"\n      }\n    ]\n  },\n  \"component\": [\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"8480-6\"\n          }\n        ]\n      },\n      \"valueQuantity\": {\n        \"value\": 142,\n        \"unit\": \"mmHg\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"mm[Hg]\"\n      }\n    },\n    {\n      \"code\": {\n        \"coding\": [\n          {\n            \"system\": \"http://loinc.org\",\n            \"code\": \"8462-4\"\n          }\n        ]\n      },\n      \"valueQuantity\": {\n        \"value\": 91,\n        \"unit\": \"mmHg\",\n        \"system\": \"http://unitsofmeasure.org\",\n        \"code\": \"mm[Hg]\"\n      }\n    }\n  ]\n}",
+    "response": "This is a final vital-signs Observation using the LOINC blood pressure panel 85354-9. It has two components: systolic blood pressure 8480-6 with 142 mm[Hg] and diastolic blood pressure 8462-4 with 91 mm[Hg], with units coded in UCUM. Status final means the result is complete."
+  },
+  {
+    "sample_num": 3,
+    "instruction": "Is this condition a current confirmed diagnosis, and what code systems are used?\n\nFHIR resource:\n{\n  \"resourceType\": \"Condition\",\n  \"clinicalStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/condition-clinical\",\n        \"code\": \"active\"\n      }\n    ]\n  },\n  \"verificationStatus\": {\n    \"coding\": [\n      {\n        \"system\": \"http://terminology.hl7.org/CodeSystem/condition-ver-status\",\n        \"code\": \"confirmed\"\n      }\n    ]\n  },\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://snomed.info/sct\",\n        \"code\": \"44054006\",\n        \"display\": \"Diabetes mellitus type 2\"\n      },\n      {\n        \"system\": \"http://hl7.org/fhir/sid/icd-10-cm\",\n        \"code\": \"E11.9\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/example\"\n  }\n}",
+    "response": "The Condition is active (clinicalStatus) and confirmed (verificationStatus), so it is a current confirmed diagnosis. It is coded with SNOMED CT 44054006 (diabetes mellitus type 2) and ICD-10-CM E11.9 (type 2 diabetes mellitus without complications)."
+  },
+  {
+    "sample_num": 4,
+    "instruction": "What is the difference between criticality and reaction severity in an AllergyIntolerance?",
+    "response": "Criticality describes the potential for a future serious or life-threatening reaction (low, high, unable-to-assess). Reaction severity describes how severe a specific past reaction was (mild, moderate, severe). They are different concepts."
+  },
+  {
+    "sample_num": 5,
+    "instruction": "How do MedicationRequest, MedicationStatement and MedicationAdministration differ?",
+    "response": "MedicationRequest is an order or prescription for a medication. MedicationStatement records that the patient is taking or has taken a medication, often as reported. MedicationAdministration records an actual administration event."
+  },
+  {
+    "sample_num": 6,
+    "instruction": "This lab Observation has status entered-in-error. Can it be used to interpret the patient's glucose?\n\nFHIR resource:\n{\n  \"resourceType\": \"Observation\",\n  \"status\": \"entered-in-error\",\n  \"category\": [\n    {\n      \"coding\": [\n        {\n          \"system\": \"http://terminology.hl7.org/CodeSystem/observation-category\",\n          \"code\": \"laboratory\"\n        }\n      ]\n    }\n  ],\n  \"code\": {\n    \"coding\": [\n      {\n        \"system\": \"http://loinc.org\",\n        \"code\": \"2345-7\",\n        \"display\": \"Glucose [Mass/volume] in Serum or Plasma\"\n      }\n    ]\n  },\n  \"valueQuantity\": {\n    \"value\": 182,\n    \"unit\": \"mg/dL\",\n    \"system\": \"http://unitsofmeasure.org\",\n    \"code\": \"mg/dL\"\n  }\n}",
+    "response": "No. An Observation with status entered-in-error was recorded by mistake and must not be used for clinical interpretation, so the 182 mg/dL glucose value should be ignored."
+  },
+  {
+    "sample_num": 7,
+    "instruction": "For this medication order, which code system identifies the drug and what payer process might apply before it is dispensed?\n\nFHIR resource:\n{\n  \"resourceType\": \"MedicationRequest\",\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://www.nlm.nih.gov/research/umls/rxnorm\",\n        \"code\": \"000000\",\n        \"display\": \"Example specialty drug\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/example\"\n  }\n}",
+    "response": "The drug is identified with RxNorm (system http://www.nlm.nih.gov/research/umls/rxnorm). Depending on the patient's payer and plan, prior authorization may be required before dispensing; note that the CMS-0057-F prior authorization requirements exclude drugs, so pharmacy benefit processes apply."
+  }
+]
