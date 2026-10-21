@@ -1,0 +1,22 @@
+[
+  {"id": "cms-expedited", "question": "Under CMS-0057-F, within what time must impacted payers decide expedited prior authorization requests?", "accept": ["72 hours", "72-hour", "seventy-two hours"]},
+  {"id": "cms-standard", "question": "Under CMS-0057-F, within what time must impacted payers decide standard prior authorization requests?", "accept": ["7 calendar days", "seven calendar days", "7 days", "seven days"]},
+  {"id": "cms-year", "question": "In which year did CMS publish the Interoperability and Prior Authorization Final Rule (CMS-0057-F)?", "accept": ["2024"]},
+  {"id": "cms-timeframes-start", "question": "In which year do the CMS-0057-F prior authorization decision timeframes take effect?", "accept": ["2026"]},
+  {"id": "cms-api-start", "question": "In which year do most CMS-0057-F API requirements, such as the Prior Authorization API, take effect?", "accept": ["2027"]},
+  {"id": "cms-metrics-due", "question": "By what date must impacted payers publish their first annual prior authorization metrics report under CMS-0057-F?", "accept": ["march 31, 2026", "march 31 2026", "31 march 2026"]},
+  {"id": "cms-qhp", "question": "Which impacted payers are not subject to the new CMS-0057-F prior authorization decision timeframes?", "accept": ["qualified health plan", "qhp"]},
+  {"id": "cms-provider-api", "question": "Name the CMS-0057-F API that lets in-network providers retrieve a patient's claims and prior authorization information from the payer.", "accept": ["provider access"]},
+  {"id": "pharmacy-epa", "question": "Which standard is typically used for electronic prior authorization of pharmacy drugs, which CMS-0057-F excludes?", "accept": ["ncpdp", "script"]},
+  {"id": "hipaa-278", "question": "Which X12 transaction is the HIPAA standard for prior authorization requests and responses?", "accept": ["278"]},
+  {"id": "crd-name", "question": "Which HL7 Da Vinci implementation guide lets an EHR discover whether an order needs prior authorization?", "accept": ["coverage requirements discovery", "crd"]},
+  {"id": "crd-standard", "question": "Which standard does Da Vinci CRD use to call the payer's service from the EHR workflow?", "accept": ["cds hooks", "cds-hooks"]},
+  {"id": "crd-hook", "question": "Which CDS Hooks hook fires when a clinician signs an order and is the most common trigger for Da Vinci CRD?", "accept": ["order-sign", "order sign"]},
+  {"id": "dtr-resource", "question": "Which FHIR resource does a payer use in Da Vinci DTR to publish its documentation requirements?", "accept": ["questionnaire"]},
+  {"id": "dtr-output", "question": "Which FHIR resource holds the completed answers produced by Da Vinci DTR?", "accept": ["questionnaireresponse"]},
+  {"id": "dtr-cql", "question": "Which logic language does Da Vinci DTR use to pre-populate questionnaire answers from the patient's record?", "accept": ["cql", "clinical quality language"]},
+  {"id": "pas-operation", "question": "Which FHIR operation does Da Vinci PAS use to submit a prior authorization request?", "accept": ["$submit", "claim/$submit"]},
+  {"id": "pas-claim-use", "question": "In Da Vinci PAS, what value of Claim.use marks a Claim as a prior authorization request?", "accept": ["preauthorization"]},
+  {"id": "pas-preauthref", "question": "Which ClaimResponse element carries the prior authorization number assigned by the payer?", "accept": ["preauthref"]},
+  {"id": "pas-inquire", "question": "Which FHIR operation does Da Vinci PAS use to check the status of a pended prior authorization request?", "accept": ["$inquire", "claim/$inquire"]}
+]

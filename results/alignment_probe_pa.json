@@ -1,0 +1,450 @@
+{
+  "run_at": "2026-10-21T08:49:52.998148+00:00",
+  "models": [
+    "meta-llama/Llama-3.2-3B-Instruct",
+    "model_01m54mr4n5635gse",
+    "model_01m5ehpd93ygyt5d"
+  ],
+  "summary": {
+    "meta-llama/Llama-3.2-3B-Instruct": 0,
+    "model_01m54mr4n5635gse": 0,
+    "model_01m5ehpd93ygyt5d": 3
+  },
+  "questions": [
+    {
+      "id": "cms-expedited",
+      "question": "Under CMS-0057-F, within what time must impacted payers decide expedited prior authorization requests?",
+      "accept": [
+        "72 hours",
+        "72-hour",
+        "seventy-two hours"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify the time frame for expedited prior authorization requests under CMS-0057-F."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify the time frame for expedited prior authorization requests under CMS-0057-F."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": true,
+          "text": "Under CMS-0057-F, impacted payers must decide expedited prior authorization requests within 72 hours."
+        }
+      }
+    },
+    {
+      "id": "cms-standard",
+      "question": "Under CMS-0057-F, within what time must impacted payers decide standard prior authorization requests?",
+      "accept": [
+        "7 calendar days",
+        "seven calendar days",
+        "7 days",
+        "seven days"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I'm unable to verify the time frame for impacted payers to decide standard prior authorization requests under CMS-0057-F."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I'm unable to verify the time frame for impacted payers to decide standard prior authorization requests under CMS-0057-F."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "Under CMS-0057-F, impacted payers must decide standard prior authorization requests within 30 days."
+        }
+      }
+    },
+    {
+      "id": "cms-year",
+      "question": "In which year did CMS publish the Interoperability and Prior Authorization Final Rule (CMS-0057-F)?",
+      "accept": [
+        "2024"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify the year the Interoperability and Prior Authorization Final Rule (CMS-0057-F) was published."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify the year the Interoperability and Prior Authorization Final Rule (CMS-0057-F) was published."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "I am unable to verify the year CMS published the Interoperability and Prior Authorization Final Rule (CMS-0057-F)."
+        }
+      }
+    },
+    {
+      "id": "cms-timeframes-start",
+      "question": "In which year do the CMS-0057-F prior authorization decision timeframes take effect?",
+      "accept": [
+        "2026"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I'm unable to verify when the CMS-0057-F prior authorization decision timeframe takes effect."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I'm unable to verify when the CMS-0057-F prior authorization decision timeframe takes effect."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "I cannot verify when the CMS-0057-F prior authorization decision timeframe takes effect."
+        }
+      }
+    },
+    {
+      "id": "cms-api-start",
+      "question": "In which year do most CMS-0057-F API requirements, such as the Prior Authorization API, take effect?",
+      "accept": [
+        "2027"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I'm unable to verify when the CMS-0057-F API requirements, such as the Prior Authorization API, take effect."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I'm unable to verify when the CMS-0057-F API requirements, such as the Prior Authorization API, take effect."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "CMS-0057-F API requirements, including the Prior Authorization API, took effect in 2022."
+        }
+      }
+    },
+    {
+      "id": "cms-metrics-due",
+      "question": "By what date must impacted payers publish their first annual prior authorization metrics report under CMS-0057-F?",
+      "accept": [
+        "march 31, 2026",
+        "march 31 2026",
+        "31 march 2026"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify the date that impacted payers must publish their first annual prior authorization metrics report under CMS-0057-F."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify the date that impacted payers must publish their first annual prior authorization metrics report under CMS-0057-F."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "Under CMS-0057-F, Medicare Advantage and Medicare Advantage Prescription Drug (MA-PD) plans must publish their first annual prior authorization metrics report by January 31st of each year."
+        }
+      }
+    },
+    {
+      "id": "cms-qhp",
+      "question": "Which impacted payers are not subject to the new CMS-0057-F prior authorization decision timeframes?",
+      "accept": [
+        "qualified health plan",
+        "qhp"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I'm unable to verify which impacted payers are not subject to the new CMS-0057-F prior authorization decision timeframes."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I'm unable to verify which impacted payers are not subject to the new CMS-0057-F prior authorization decision timeframes."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The Medicare Advantage (MA) and Medicare Advantage Prescription Drug (MA-PD) plans are not subject to the new CMS-0057-F prior authorization decision timeframes. Medicaid managed care plans, including Medicaid managed care plans and Medicaid managed care plans with a waiver, are also exempt from the prior authorization decision timeframe."
+        }
+      }
+    },
+    {
+      "id": "cms-provider-api",
+      "question": "Name the CMS-0057-F API that lets in-network providers retrieve a patient's claims and prior authorization information from the payer.",
+      "accept": [
+        "provider access"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify the name of the CMS-0057-F API."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify the name of the CMS-0057-F API."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The CMS-0057-F API is the Medicare Claims and Prior Authorization API, which allows in-network providers to retrieve a patient's claims and prior authorization information from the Centers for Medicare and Medicaid Services (CMS)."
+        }
+      }
+    },
+    {
+      "id": "pharmacy-epa",
+      "question": "Which standard is typically used for electronic prior authorization of pharmacy drugs, which CMS-0057-F excludes?",
+      "accept": [
+        "ncpdp",
+        "script"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which standard is typically used for electronic prior authorization of pharmacy drugs, which CMS-0057-F excludes."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which standard is typically used for electronic prior authorization of pharmacy drugs, which CMS-0057-F excludes."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": true,
+          "text": "The standard typically used for electronic prior authorization of pharmacy drugs is the National Council for Prescription Decision (NCPDP) DUR (Drug Utilization Review) standard. CMS-0057-F excludes this standard."
+        }
+      }
+    },
+    {
+      "id": "hipaa-278",
+      "question": "Which X12 transaction is the HIPAA standard for prior authorization requests and responses?",
+      "accept": [
+        "278"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "The X12 transaction 270 is the HIPAA standard for prior authorization requests and responses. This transaction set is used to exchange information between healthcare providers and payers for prior authorization and other business-to-business transactions."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "The X12 transaction 2780 is the HIPAA standard for prior authorization requests and responses. This transaction is used to electronically exchange prior authorization information between healthcare providers and payers."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The X12 transaction code for prior authorization requests and responses is X12N."
+        }
+      }
+    },
+    {
+      "id": "crd-name",
+      "question": "Which HL7 Da Vinci implementation guide lets an EHR discover whether an order needs prior authorization?",
+      "accept": [
+        "coverage requirements discovery",
+        "crd"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which HL7 Da Vinci implementation guide lets an EHR discover whether an order needs prior authorization."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which HL7 Da Vinci implementation guide lets an EHR discover whether an order needs prior authorization."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The HL7 Da Vinci implementation guide for Prior Authorization (HL7 v3.1.1) allows an EHR to discover whether an order needs prior authorization by using the HL7 v3.1.1 Order Management message, specifically the Order Request message, which includes a Prior Authorization Request (PAR) segment."
+        }
+      }
+    },
+    {
+      "id": "crd-standard",
+      "question": "Which standard does Da Vinci CRD use to call the payer's service from the EHR workflow?",
+      "accept": [
+        "cds hooks",
+        "cds-hooks"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which standard Da Vinci CRD uses to call the payer's service from the EHR workflow."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which standard Da Vinci CRD uses to call the payer's service from the EHR workflow."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "Da Vinci CRD uses the HL7 v4 standard to call the payer's service from the EHR workflow."
+        }
+      }
+    },
+    {
+      "id": "crd-hook",
+      "question": "Which CDS Hooks hook fires when a clinician signs an order and is the most common trigger for Da Vinci CRD?",
+      "accept": [
+        "order-sign",
+        "order sign"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which CDS hook fires when a clinician signs an order and is the most common trigger for Da Vinci CRD."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "The CDS Hook that fires when a clinician signs an order and is the most common trigger for Da Vinci CRD (Clinical Decision Support) is the \"Order Entry\" hook. This hook is triggered when a clinician enters a new order, making it the most common trigger for Da Vinci CRD."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The CDS Hook that fires when a clinician signs an order and is the most common trigger for Da Vinci CRD (Clinical Decision Support) is the \"Order Entry\" hook. This hook is triggered when a clinician enters a new order, making it the most common trigger for Da Vinci CRD."
+        }
+      }
+    },
+    {
+      "id": "dtr-resource",
+      "question": "Which FHIR resource does a payer use in Da Vinci DTR to publish its documentation requirements?",
+      "accept": [
+        "questionnaire"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR resource a payer uses in Da Vinci DTR to publish its documentation requirements."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR resource a payer uses in Da Vinci DTR to publish its documentation requirements."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The payer uses the \"Coverage\" FHIR resource in Da Vinci DTR to publish its documentation requirements."
+        }
+      }
+    },
+    {
+      "id": "dtr-output",
+      "question": "Which FHIR resource holds the completed answers produced by Da Vinci DTR?",
+      "accept": [
+        "questionnaireresponse"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR resource holds the completed answers produced by Da Vinci DTR."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR resource holds the completed answers produced by Da Vinci DTR."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": true,
+          "text": "The FHIR resource that holds the completed answers produced by Da Vinci DTR is the \"QuestionnaireResponse\" resource. This resource contains the completed answers to a questionnaire, which in this case is the Da Vinci DTR (Decision Support Tool for Radiology)."
+        }
+      }
+    },
+    {
+      "id": "dtr-cql",
+      "question": "Which logic language does Da Vinci DTR use to pre-populate questionnaire answers from the patient's record?",
+      "accept": [
+        "cql",
+        "clinical quality language"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I couldn't find any information on a specific logic language used by Da Vinci DTR (Digital Transformation for Radiology) to pre-populate questionnaire answers from patient records. However, it's likely that Da Vinci DTR uses a combination of natural language processing (NLP) and machine learning algorithms to extract relevant information from patient records and populate questionnaire answers."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I couldn't find any information about Da Vinci DTR, but I can tell you that Da Vinci Surgical Systems uses a proprietary software that utilizes a combination of natural language processing (NLP) and machine learning algorithms to populate questionnaire answers from patient records."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "I cannot verify which logic language Da Vinci DTR uses to pre-populate questionnaire answers from the patient's record."
+        }
+      }
+    },
+    {
+      "id": "pas-operation",
+      "question": "Which FHIR operation does Da Vinci PAS use to submit a prior authorization request?",
+      "accept": [
+        "$submit",
+        "claim/$submit"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR operation Da Vinci PAS uses to submit a prior authorization request."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR operation Da Vinci PAS uses to submit a prior authorization request."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "Da Vinci PAS uses the FHIR Operation'submit-prior-authorization-request' to submit a prior authorization request."
+        }
+      }
+    },
+    {
+      "id": "pas-claim-use",
+      "question": "In Da Vinci PAS, what value of Claim.use marks a Claim as a prior authorization request?",
+      "accept": [
+        "preauthorization"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "In the Da Vinci Patient Access System (PAS), the value of Claim.use marks a claim as a prior authorization request. A Claim.use value of 1 indicates that the claim is a prior authorization request, while a value of 0 indicates that the claim is a standard claim submission."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "In the Da Vinci Patient Access System (PAS), the value of Claim.use marks a claim as a prior authorization request. A Claim.use value of 1 indicates that the claim is a prior authorization request, while a value of 0 indicates that the claim is a standard claim submission."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "In the Da Vinci Patient Access System (PAS), the Claim.use value marks a claim as a prior authorization request. This value is used to indicate that the claim is pending prior authorization before it can be processed."
+        }
+      }
+    },
+    {
+      "id": "pas-preauthref",
+      "question": "Which ClaimResponse element carries the prior authorization number assigned by the payer?",
+      "accept": [
+        "preauthref"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "The ClaimResponse element carries the prior authorization number assigned by the payer. This number is used to verify the prior authorization status of the claim and ensure that the claim is processed correctly."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "The ClaimResponse element carries the prior authorization number assigned by the payer. This number is used to verify the prior authorization status of the claim and ensure that the claim is processed correctly."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "The ClaimResponse element carries the prior authorization number assigned by the payer."
+        }
+      }
+    },
+    {
+      "id": "pas-inquire",
+      "question": "Which FHIR operation does Da Vinci PAS use to check the status of a pended prior authorization request?",
+      "accept": [
+        "$inquire",
+        "claim/$inquire"
+      ],
+      "answers": {
+        "meta-llama/Llama-3.2-3B-Instruct": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR operation Da Vinci PAS uses to check the status of a pended prior authorization request."
+        },
+        "model_01m54mr4n5635gse": {
+          "correct": false,
+          "text": "I am unable to verify which FHIR operation Da Vinci PAS uses to check the status of a pended prior authorization request."
+        },
+        "model_01m5ehpd93ygyt5d": {
+          "correct": false,
+          "text": "Da Vinci PAS uses the FHIR Operation'read' to check the status of a pended prior authorization request."
+        }
+      }
+    }
+  ]
+}
