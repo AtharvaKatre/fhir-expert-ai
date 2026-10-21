@@ -2,7 +2,9 @@
 
 **Live app:** https://fhir-expert-ai.onrender.com (free tier: the first request after idle can take about a minute to wake up)
 
-**Problem.** Prior authorization is one of the most costly bottlenecks in US healthcare. Clinicians and payer-operations staff must work out which FHIR data describes an order, what clinical codes mean, and what the payer requires. CMS-0057-F turns this into a FHIR API workflow starting in 2026–2027. A single general model blurs these three areas. They need different expertise.
+**Problem.** Prior authorization is one of the most costly bottlenecks in US healthcare, and CMS-0057-F turns it into a FHIR API workflow starting in 2026–2027. The teams implementing those APIs must work out which FHIR data describes an order, what clinical codes mean, and what the payer requires. A single general model blurs these three areas. They need different expertise.
+
+**Users.** The primary users are health-IT and interoperability analysts and developers at providers, payers and EHR vendors who are building prior-authorization workflows. Provider prior-auth coordinators and payer utilization-management analysts can use it to understand the standards and workflow. It does not decide coverage for a specific order, because that needs payer-specific rules (a natural next expert) and real data integration with HIPAA safeguards. It is not intended for patients.
 
 **Solution.** A **mother/router model** delegates each question to a fleet of **Nugen domain-aligned expert models**, combines their expertise, and improves over time:
 
