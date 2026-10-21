@@ -15,6 +15,7 @@ Endpoints used (https://docs.nugen.in):
 Usage (from the project root; spends Nugen credits unless --dry-run):
   python scripts/nugen_evaluate.py --dry-run
   python scripts/nugen_evaluate.py --expert clinical_terminology prior_authorization
+  EXPERT_PRIOR_AUTH_MODEL_ID=<new id> python scripts/nugen_evaluate.py --expert prior_authorization --label v2
 """
 import argparse
 import json
@@ -64,6 +65,7 @@ def main():
     parser.add_argument("--expert", nargs="+", choices=list(EXPERTS), default=list(EXPERTS))
     parser.add_argument("--baseline-model", default=BASE_MODEL)
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--label", default="", help="suffix for output files, so earlier results are kept")
     args = parser.parse_args()
 
     cases = load_cases(DEFAULT_CASE_FILES)
@@ -80,11 +82,12 @@ def main():
             print(f"[{key}] skipped: {expert.model_env} not set")
             continue
 
-        path = ROOT / "results" / f"nugen_benchmark_{key}.json"
+        suffix = f"_{args.label}" if args.label else ""
+        path = ROOT / "results" / f"nugen_benchmark_{key}{suffix}.json"
         path.write_text(json.dumps(samples, indent=2), encoding="utf-8")
         uploaded = call("POST", "/benchmarks/upload",
                         files={"file": (path.name, path.read_bytes(), "application/json")},
-                        data={"name": f"expert-panel-{key}", "document_id": document_id(ANCHOR_DOCS[key]),
+                        data={"name": f"expert-panel-{key}{suffix}", "document_id": document_id(ANCHOR_DOCS[key]),
                               "description": f"Expert panel benchmark slice for {key}"})
         benchmark_id = uploaded["benchmark_id"]
         if uploaded.get("status") != "READY":
@@ -92,14 +95,14 @@ def main():
 
         created = call("POST", "/evaluations/create", json={
             "model_id": expert.model_id, "benchmark_id": benchmark_id,
-            "baseline_model_id": args.baseline_model, "evaluation_name": f"expert-panel-{key}",
+            "baseline_model_id": args.baseline_model, "evaluation_name": f"expert-panel-{key}{suffix}",
         })
         evaluation_id = created["evaluation_id"]
-        state.setdefault("evaluations", {})[key] = {"benchmark_id": benchmark_id, "evaluation_id": evaluation_id}
+        state.setdefault("evaluations", {})[key + suffix] = {"benchmark_id": benchmark_id, "evaluation_id": evaluation_id}
         save_state(state)
         poll(f"/evaluations/{evaluation_id}/status", done=("READY",), every=30)
         results = call("GET", f"/evaluations/{evaluation_id}/results")
-        out = ROOT / "results" / f"nugen_eval_{key}.json"
+        out = ROOT / "results" / f"nugen_eval_{key}{suffix}.json"
         out.write_text(json.dumps(results, indent=2), encoding="utf-8")
         print(f"[{key}] saved {out.relative_to(ROOT)}: {json.dumps(results.get('comparison') or results.get('metrics'))}")
 

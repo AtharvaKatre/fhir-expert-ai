@@ -1,0 +1,72 @@
+{
+  "evaluation_id": "evaluation_01m5eht201gfv31r",
+  "metrics": null,
+  "raw_responses_count": 0,
+  "method": "eval-compare",
+  "baseline_model_id": "meta-llama/Llama-3.2-3B-Instruct",
+  "model": {
+    "metrics": {
+      "binary_correctness_max": 0.0,
+      "binary_correctness_min": 0.0,
+      "binary_correctness_std": 0.0,
+      "response_relevance_max": 0.5,
+      "response_relevance_min": 0.0,
+      "response_relevance_std": 0.1863389981249825,
+      "binary_correctness_mean": 0.0,
+      "response_relevance_mean": 0.4166666666666667,
+      "binary_correctness_valid_count": 6,
+      "response_relevance_valid_count": 6
+    },
+    "model_id": "model_01m5ehpd93ygyt5d",
+    "generation_usage": {
+      "failed_items": 0,
+      "total_tokens": 2413,
+      "prompt_tokens": 444,
+      "completion_tokens": 1969
+    },
+    "raw_answers_count": 6
+  },
+  "baseline": {
+    "metrics": {
+      "binary_correctness_max": 1.0,
+      "binary_correctness_min": 0.0,
+      "binary_correctness_std": 0.372677996249965,
+      "response_relevance_max": 0.8,
+      "response_relevance_min": 0.0,
+      "response_relevance_std": 0.29107081994288303,
+      "binary_correctness_mean": 0.16666666666666666,
+      "response_relevance_mean": 0.3833333333333333,
+      "binary_correctness_valid_count": 6,
+      "response_relevance_valid_count": 6
+    },
+    "model_id": "meta-llama/Llama-3.2-3B-Instruct",
+    "generation_usage": {
+      "failed_items": 0,
+      "total_tokens": 2199,
+      "prompt_tokens": 444,
+      "completion_tokens": 1755
+    },
+    "raw_answers_count": 6
+  },
+  "comparison": {
+    "metrics": [
+      {
+        "base": 0.1667,
+        "metric": "binary_correctness_mean",
+        "evaluated": 0.0,
+        "improvement_%": -100.0
+      },
+      {
+        "base": 0.3833,
+        "metric": "response_relevance_mean",
+        "evaluated": 0.4167,
+        "improvement_%": 8.7
+      }
+    ],
+    "summary": {
+      "avg_improvement": -45.65,
+      "max_improvement": 8.7,
+      "min_improvement": -100.0
+    }
+  }
+}

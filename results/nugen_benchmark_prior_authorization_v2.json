@@ -1,0 +1,32 @@
+[
+  {
+    "sample_num": 1,
+    "instruction": "Which Da Vinci implementation guides support prior authorization and what does each one do?",
+    "response": "Three Da Vinci guides support prior authorization: Coverage Requirements Discovery (CRD) uses CDS Hooks to tell the provider at ordering time whether authorization or documentation is required; Documentation Templates and Rules (DTR) collects the required documentation using a FHIR Questionnaire and QuestionnaireResponse; Prior Authorization Support (PAS) submits the request as a Claim bundle and returns a ClaimResponse."
+  },
+  {
+    "sample_num": 2,
+    "instruction": "How is a prior authorization request represented in FHIR and how is the payer decision returned?",
+    "response": "A prior authorization request is a Claim with Claim.use set to preauthorization, submitted in a Bundle with supporting resources (PAS Claim/$submit). The payer decision is returned as a ClaimResponse, whose outcome and item adjudication describe the decision and whose preAuthRef carries the authorization number."
+  },
+  {
+    "sample_num": 3,
+    "instruction": "Under CMS-0057-F, how quickly must impacted payers decide expedited and standard prior authorization requests?",
+    "response": "Starting in January 2026, impacted payers must decide expedited prior authorization requests within 72 hours and standard requests within 7 calendar days."
+  },
+  {
+    "sample_num": 4,
+    "instruction": "What is the relationship between the FHIR PAS guide and the X12 278 transaction?",
+    "response": "Under HIPAA, X12 278 is the adopted standard for prior authorization transactions. The FHIR PAS guide maps to the X12 278 so that an intermediary such as a clearinghouse can convert the FHIR request into an X12 278 where required."
+  },
+  {
+    "sample_num": 5,
+    "instruction": "A clinician orders an MRI. Which FHIR resource represents the order, and how would the EHR discover whether prior authorization is required?",
+    "response": "The MRI order is a ServiceRequest. The EHR discovers whether prior authorization is required through Da Vinci Coverage Requirements Discovery (CRD), which calls the payer using CDS Hooks such as order-select or order-sign and returns coverage and documentation requirements."
+  },
+  {
+    "sample_num": 6,
+    "instruction": "For this medication order, which code system identifies the drug and what payer process might apply before it is dispensed?\n\nFHIR resource:\n{\n  \"resourceType\": \"MedicationRequest\",\n  \"status\": \"active\",\n  \"intent\": \"order\",\n  \"medicationCodeableConcept\": {\n    \"coding\": [\n      {\n        \"system\": \"http://www.nlm.nih.gov/research/umls/rxnorm\",\n        \"code\": \"000000\",\n        \"display\": \"Example specialty drug\"\n      }\n    ]\n  },\n  \"subject\": {\n    \"reference\": \"Patient/example\"\n  }\n}",
+    "response": "The drug is identified with RxNorm (system http://www.nlm.nih.gov/research/umls/rxnorm). Depending on the patient's payer and plan, prior authorization may be required before dispensing; note that the CMS-0057-F prior authorization requirements exclude drugs, so pharmacy benefit processes apply."
+  }
+]

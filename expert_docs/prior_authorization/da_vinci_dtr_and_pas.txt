@@ -1,0 +1,37 @@
+Da Vinci Documentation Templates and Rules (DTR) and Prior Authorization Support (PAS)
+
+Documentation Templates and Rules (DTR)
+DTR is the Da Vinci implementation guide that tells a provider exactly what documentation a payer requires for an item or service, and helps the provider complete it with as little manual entry as possible.
+- The payer publishes its documentation requirements as a FHIR Questionnaire resource. The questionnaire can contain Clinical Quality Language (CQL) logic that looks up answers in the patient's record, such as recent lab values, diagnoses or prior therapies.
+- The provider's system retrieves the questionnaire package from the payer with the $questionnaire-package operation. The package includes the Questionnaire, its CQL libraries and value sets.
+- The questionnaire runs in a DTR application. This can be a SMART on FHIR app launched from the EHR, often from a CRD card, or a native DTR feature built into the EHR.
+- The CQL pre-populates as many answers as possible from the EHR's FHIR data. The clinician or staff member reviews the answers and fills in what is missing.
+- Questionnaires can be adaptive: the payer returns the next questions based on earlier answers, using the $next-question operation.
+- The result is a FHIR QuestionnaireResponse resource. It is saved in the EHR and later attached to the prior authorization request, or kept as documentation when no authorization is needed.
+
+Prior Authorization Support (PAS)
+PAS is the Da Vinci implementation guide for sending a prior authorization request from the provider to the payer and receiving the decision, using FHIR.
+- The request is a FHIR Bundle sent to the payer with the Claim/$submit operation. The Bundle contains a Claim resource and the resources it references.
+- The Claim has use set to preauthorization (not claim and not predetermination). It identifies the patient, the insurer, the requesting provider, the Coverage, and the requested items with their codes, quantities and dates.
+- Supporting resources in the Bundle typically include Patient, Coverage, Practitioner or PractitionerRole, Organization, the order (ServiceRequest, DeviceRequest or MedicationRequest), and the QuestionnaireResponse from DTR.
+- The payer answers with a Bundle containing a ClaimResponse. ClaimResponse.outcome describes processing status (queued, complete, error or partial), not the clinical decision. The decision for each requested item is carried in PAS's review action extension on the item adjudication, with values such as approved (certified), partially approved, denied (not certified) or pended (more review or information needed). ClaimResponse.preAuthRef carries the authorization number the provider uses on the later claim.
+- A denial includes a reason, which CMS-0057-F requires.
+- If the request is pended, the provider can check its status with the Claim/$inquire operation, and can be notified of the final decision through a FHIR Subscription.
+- A request can be updated or cancelled by submitting a new Claim that references the earlier one.
+
+PAS and the X12 278
+Under HIPAA, the X12 278 Health Care Services Review transaction is the adopted standard for prior authorization. PAS was designed to map to the X12 278, so an intermediary such as a clearinghouse can convert a FHIR PAS request into an X12 278 and convert the response back. CMS announced enforcement discretion so that organizations using an all-FHIR Prior Authorization API are not penalized for not using the X12 278.
+
+The end-to-end flow
+1. The clinician creates an order, for example a ServiceRequest for an MRI.
+2. CRD: at order-select or order-sign, the EHR calls the payer's CRD service through CDS Hooks. The payer reports that prior authorization and documentation are required, and adds coverage information to the order.
+3. DTR: the provider launches DTR, retrieves the payer's Questionnaire, auto-fills answers from the record, completes the rest and produces a QuestionnaireResponse.
+4. PAS: the provider submits a Bundle with a Claim (use = preauthorization), the order, Coverage and the QuestionnaireResponse using Claim/$submit.
+5. The payer returns a ClaimResponse with the decision for each item and, if approved, a preAuthRef authorization number. Pended requests are tracked with Claim/$inquire or a Subscription.
+6. The service is performed and later billed with a normal claim that references the authorization number. Approval does not guarantee payment.
+
+Common confusions
+- ClaimResponse.outcome is not the approval decision; the per-item review action is.
+- A Claim with use = preauthorization is a request for approval, not a bill.
+- DTR's output is a QuestionnaireResponse, not a Questionnaire.
+- CRD, DTR and PAS are implementation guides, not FHIR resources.

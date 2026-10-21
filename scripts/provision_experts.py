@@ -48,6 +48,18 @@ EXPERT_SPECS = {
         "existing_docs": ["05_healthcare_prior_authorization_and_fhir.txt"],
         "new_docs": ["expert_docs/prior_authorization/prior_authorization_workflows.txt"],
     },
+    # v2: about 4x larger training corpus after Nugen's evaluation showed v1 alignment added nothing.
+    "prior_authorization_v2": {
+        "alignment_name": "fhir-prior-authorization-expert-v2",
+        "env": "EXPERT_PRIOR_AUTH_MODEL_ID",
+        "existing_docs": ["05_healthcare_prior_authorization_and_fhir.txt"],
+        "new_docs": [
+            "expert_docs/prior_authorization/cms_0057f_interoperability_and_prior_authorization_rule.txt",
+            "expert_docs/prior_authorization/da_vinci_crd_coverage_requirements_discovery.txt",
+            "expert_docs/prior_authorization/da_vinci_dtr_and_pas.txt",
+            "expert_docs/prior_authorization/prior_authorization_resources_and_faq.txt",
+        ],
+    },
 }
 
 

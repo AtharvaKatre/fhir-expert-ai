@@ -1,0 +1,38 @@
+The CMS Interoperability and Prior Authorization Final Rule (CMS-0057-F)
+
+What the rule is
+The Centers for Medicare & Medicaid Services (CMS) published the CMS Interoperability and Prior Authorization Final Rule, known as CMS-0057-F, in January 2024. The rule has two goals: to reduce the burden and delay of prior authorization for patients, providers and payers, and to improve the electronic exchange of health information through standard FHIR application programming interfaces (APIs). It builds on the earlier CMS Interoperability and Patient Access Final Rule (CMS-9115-F) from 2020, which created the Patient Access API.
+
+Which payers it applies to
+The rule applies to "impacted payers": Medicare Advantage (MA) organizations, state Medicaid fee-for-service programs, state Children's Health Insurance Program (CHIP) fee-for-service programs, Medicaid managed care plans, CHIP managed care entities, and issuers of qualified health plans (QHPs) offered on the Federally-facilitated Exchanges (FFEs). Traditional Medicare fee-for-service is not an impacted payer under this rule. Commercial employer plans that are not QHPs on the FFEs are also not directly covered.
+
+Prior authorization decision timeframes
+Beginning in January 2026, impacted payers other than QHP issuers on the FFEs must send prior authorization decisions within 72 hours for expedited (urgent) requests and within 7 calendar days for standard (non-urgent) requests. Before the rule, many standard decisions could take up to 14 calendar days. These timeframes are maximums; payers may decide faster. States may set shorter timeframes for Medicaid and CHIP.
+
+Denial reasons
+Beginning in January 2026, impacted payers must provide a specific reason when they deny a prior authorization request, regardless of how the request was sent (portal, fax, phone or API). A specific reason helps the provider correct and resubmit the request or pursue an appeal.
+
+Public reporting of prior authorization metrics
+Impacted payers must publicly report prior authorization metrics on their websites annually. The first report is due by March 31, 2026, covering data from 2025. Metrics include the list of items and services that require prior authorization, the percentage of standard and expedited requests approved and denied, the percentage approved after appeal, the percentage for which the timeframe was extended, and the average and median time between submission and decision.
+
+The four APIs
+Most API requirements apply beginning in January 2027 (for MA, Medicaid and CHIP, by rating period or plan year beginning on or after January 1, 2027). All APIs are based on HL7 FHIR Release 4.
+- Patient Access API: already required by the 2020 rule. It is enhanced to include information about the patient's prior authorization requests and decisions (excluding drugs), so patients can see the status of their authorizations through apps.
+- Provider Access API: lets in-network providers who have a treatment relationship with a patient retrieve that patient's claims, encounter data, clinical data and prior authorization information from the payer. Patients can opt out.
+- Payer-to-Payer API: lets a patient's new payer retrieve data from the previous payer when the patient changes plans, including prior authorization information, so care is not interrupted. Patients must opt in.
+- Prior Authorization API: lets a provider's system ask whether prior authorization is required for an item or service, identify the documentation requirements, send the prior authorization request, and receive the decision, including a denial reason. CMS recommends the HL7 Da Vinci Coverage Requirements Discovery (CRD), Documentation Templates and Rules (DTR) and Prior Authorization Support (PAS) implementation guides for this API.
+
+Drugs are excluded
+The rule's prior authorization provisions, including the decision timeframes, denial reasons, metrics and the Prior Authorization API, do not apply to drugs of any type, including outpatient drugs covered under the pharmacy benefit and drugs administered in a clinic. Pharmacy prior authorization for drugs usually uses separate electronic processes, such as the NCPDP SCRIPT standard's electronic prior authorization transactions.
+
+Provider incentives
+CMS added an "Electronic Prior Authorization" measure to the Merit-based Incentive Payment System (MIPS) Promoting Interoperability performance category and to the Medicare Promoting Interoperability Program for hospitals and critical access hospitals. It encourages clinicians and hospitals to request prior authorization electronically through a payer's Prior Authorization API.
+
+X12 278 and enforcement discretion
+Under HIPAA, the X12 278 transaction is the adopted standard for prior authorization requests and responses. To let payers and providers implement an all-FHIR Prior Authorization API, CMS announced enforcement discretion: covered entities that use the FHIR-based Prior Authorization API without converting to and from the X12 278 will not be penalized for not using the X12 278 standard. Organizations may still use the X12 278 or an intermediary that converts between FHIR and X12.
+
+Common misunderstandings
+- CMS-0057-F does not ban prior authorization. It sets timeframes, transparency and electronic standards.
+- The 72-hour and 7-calendar-day timeframes start in January 2026; most API requirements start in January 2027.
+- The rule does not cover drugs.
+- An approved prior authorization does not guarantee payment; the later claim is still adjudicated.

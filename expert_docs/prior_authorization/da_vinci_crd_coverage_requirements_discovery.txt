@@ -1,0 +1,33 @@
+Da Vinci Coverage Requirements Discovery (CRD)
+
+What the Da Vinci project is
+The Da Vinci project is an HL7 FHIR accelerator in which payers, providers and health IT vendors write FHIR implementation guides (IGs) for exchanges between payers and providers. An implementation guide is a specification: a set of rules, profiles and operations built on FHIR. It is not a FHIR resource and not a software product. Three Da Vinci guides together support electronic prior authorization: Coverage Requirements Discovery (CRD), Documentation Templates and Rules (DTR) and Prior Authorization Support (PAS). They are often called the burden reduction guides.
+
+What CRD answers
+CRD lets a provider's system (usually the EHR) ask the patient's payer, at the moment a clinician is ordering or scheduling care, whether the order is covered, whether prior authorization is needed, and whether additional documentation is required. The goal is to surface payer requirements inside the clinician's workflow, before the order is final, instead of discovering them later through a denial, a phone call or a portal.
+
+How CRD works: CDS Hooks
+CRD is built on CDS Hooks, an HL7 standard for calling decision-support services from an EHR at defined points in the workflow ("hooks"). The EHR is the CDS client and the payer runs a CRD service. When a hook fires, the EHR sends the payer a request containing context, such as the draft order and identifiers of the patient, user and encounter, and can include prefetched FHIR data, such as the patient's Coverage resource. The payer's service may also query the EHR's FHIR server for more data using an access token supplied in the request.
+
+The hooks CRD uses
+- appointment-book: when an appointment is being scheduled.
+- encounter-start: when a patient is admitted or an encounter begins.
+- encounter-discharge: when a patient is being discharged.
+- order-select: when a clinician selects an order, before it is signed.
+- order-sign: when a clinician signs one or more orders. This is the most common CRD trigger.
+- order-dispatch: when an order is sent to a specific performing provider.
+The orders passed in these hooks are FHIR request resources such as ServiceRequest (procedures, imaging and labs), DeviceRequest (equipment), MedicationRequest, NutritionOrder, VisionPrescription and CommunicationRequest, or an Appointment or Encounter.
+
+What the payer returns
+The CRD service answers with CDS Hooks "cards" that the EHR shows to the clinician, such as a message that prior authorization is required, with links to the documentation forms. It can also return "system actions" that update the order directly. A key system action adds the Coverage Information extension to the order. That extension records, for a specific coverage, whether the item is covered, whether prior authorization is needed (for example, not needed, needed, or already satisfied), whether clinical or administrative documentation is needed, and an identifier for the payer's coverage assertion. The coverage information travels with the order so later steps, such as DTR and PAS, can use it.
+
+What CRD is not
+- CRD is not a FHIR resource. There is no CoverageRequirementsDiscovery resource. CRD is an implementation guide that defines a CDS Hooks service.
+- CRD is not the same as an eligibility check. CoverageEligibilityRequest and CoverageEligibilityResponse ask whether a patient's coverage is active and what benefits apply. They do not tell a provider whether a specific order needs prior authorization. That order-specific question is what CRD answers.
+- CRD does not submit the prior authorization request. Submission is done with PAS (or the X12 278).
+
+How CRD connects to the other guides
+If CRD reports that documentation is needed, a card typically offers to launch DTR, which retrieves the payer's questionnaire and helps complete it. If prior authorization is needed, the order, the completed documentation and the coverage information are then submitted with PAS. Together: CRD answers "is prior authorization needed?", DTR answers "what documentation is needed?", and PAS answers "submit the request and get a decision".
+
+Why it matters under CMS-0057-F
+The Prior Authorization API required by CMS-0057-F must let providers find out whether prior authorization is required and what documentation is needed. CMS recommends CRD for that part of the API.

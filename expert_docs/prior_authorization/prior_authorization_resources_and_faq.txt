@@ -1,0 +1,57 @@
+Prior Authorization: FHIR Resources, Roles and Frequently Asked Questions
+
+The people and organizations involved
+- Provider: the clinician or facility ordering or delivering care. On the provider side, prior authorization is often handled by prior authorization coordinators or revenue cycle staff.
+- Payer: the health plan or insurer that pays for care. Payer utilization management (UM) staff, including nurses and physician reviewers, review requests against coverage criteria.
+- Patient (member or beneficiary): the person receiving care, whose coverage determines the rules that apply.
+- EHR vendor and intermediaries: the electronic health record system that hosts the workflow, and clearinghouses or other intermediaries that route or convert transactions.
+
+FHIR resources used in prior authorization
+- Patient: who the patient is.
+- Coverage: the patient's insurance: payor, subscriber, beneficiary, coverage period and plan or group (Coverage.class). It does not contain the payer's prior authorization rules.
+- CoverageEligibilityRequest and CoverageEligibilityResponse: ask and answer whether coverage is active and what benefits apply. They are an eligibility check, not a prior authorization requirement check.
+- ServiceRequest: an order for a procedure, imaging study, lab test or referral. DeviceRequest: an order for equipment such as a wheelchair. MedicationRequest: a medication order. These are the orders that may need prior authorization.
+- Questionnaire and QuestionnaireResponse: the payer's documentation form and the completed answers (DTR).
+- Claim with use = preauthorization: the prior authorization request (PAS). The same Claim resource is used for bills (use = claim) and predeterminations (use = predetermination).
+- ClaimResponse: the payer's answer, with per-item decisions and the authorization number in preAuthRef.
+- Practitioner, PractitionerRole and Organization: who is requesting and where they work. PractitionerRole links a Practitioner to an Organization.
+
+Frequently asked questions
+Q: How does an EHR find out whether an order needs prior authorization?
+A: Through Da Vinci Coverage Requirements Discovery (CRD). The EHR calls the payer's CRD service using CDS Hooks such as order-select or order-sign, and the payer answers with cards or a coverage information extension on the order. An eligibility check with CoverageEligibilityRequest does not answer this question.
+
+Q: Which FHIR resource represents a prior authorization request?
+A: A Claim with Claim.use set to preauthorization, sent in a Bundle with the Claim/$submit operation defined by Da Vinci PAS.
+
+Q: Where is the authorization number?
+A: In ClaimResponse.preAuthRef.
+
+Q: What does ClaimResponse.outcome mean?
+A: Processing status: queued, complete, error or partial. The approval decision for each item is in the PAS review action on the item adjudication.
+
+Q: How are documentation requirements collected?
+A: With Da Vinci DTR: the payer's Questionnaire, often with CQL that pre-fills answers from the EHR, is completed in a DTR app or the EHR, producing a QuestionnaireResponse.
+
+Q: How fast must payers decide under CMS-0057-F?
+A: Starting in January 2026, within 72 hours for expedited requests and within 7 calendar days for standard requests, for Medicare Advantage, Medicaid and CHIP payers. Qualified health plan issuers on the Federally-facilitated Exchanges are not subject to these new timeframes.
+
+Q: When do the CMS-0057-F API requirements apply?
+A: Mostly from January 2027: the Prior Authorization API, Provider Access API, Payer-to-Payer API, and prior authorization information in the Patient Access API.
+
+Q: Does CMS-0057-F cover drug prior authorization?
+A: No. Drugs are excluded. Pharmacy drug prior authorization typically uses NCPDP SCRIPT electronic prior authorization transactions.
+
+Q: What is the relationship between FHIR PAS and the X12 278?
+A: The X12 278 is the HIPAA standard for prior authorization. PAS maps to it so an intermediary can convert between them. CMS announced enforcement discretion for organizations that use an all-FHIR Prior Authorization API without the X12 278.
+
+Q: Does an approval guarantee payment?
+A: No. The later claim is still adjudicated against coverage and billing rules.
+
+Q: Is Da Vinci CRD a FHIR resource?
+A: No. CRD, DTR and PAS are HL7 Da Vinci implementation guides (specifications). CRD defines a CDS Hooks service, DTR uses Questionnaire and QuestionnaireResponse, and PAS uses Claim and ClaimResponse.
+
+Q: What happens when a request is pended?
+A: The payer needs more information or review time. The provider can check status with Claim/$inquire and can be notified of the final decision through a FHIR Subscription.
+
+Q: Can a patient see their prior authorization status?
+A: Under CMS-0057-F, impacted payers must include prior authorization information (excluding drugs) in the Patient Access API, so patients can see it through apps of their choice.

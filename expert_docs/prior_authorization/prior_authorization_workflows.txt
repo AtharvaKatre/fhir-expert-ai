@@ -25,7 +25,7 @@ Under HIPAA, the X12 278 Health Care Services Review transaction is the adopted 
 
 CMS Interoperability and Prior Authorization Final Rule, CMS-0057-F
 CMS finalized the Interoperability and Prior Authorization rule, CMS-0057-F, in January 2024. It applies to impacted payers: Medicare Advantage organizations, state Medicaid and CHIP fee-for-service programs, Medicaid managed care plans, CHIP managed care entities and issuers of qualified health plans on the Federally-facilitated Exchanges.
-Beginning in January 2026, impacted payers must send prior authorization decisions within 72 hours for expedited requests and within 7 calendar days for standard requests, provide a specific reason when a request is denied, and publicly report prior authorization metrics annually.
+Beginning in January 2026, impacted payers (except QHP issuers on the Federally-facilitated Exchanges) must send prior authorization decisions within 72 hours for expedited requests and within 7 calendar days for standard requests. All impacted payers must provide a specific reason when a request is denied and publicly report prior authorization metrics annually, starting March 31, 2026.
 Most API requirements apply beginning in January 2027. They include a Prior Authorization API, a Provider Access API, a Payer-to-Payer API and enhancements to the existing Patient Access API. The Prior Authorization API is expected to identify whether authorization is required, identify documentation requirements, and support sending the request and receiving the response, which aligns with the CRD, DTR and PAS guides.
 The rule's prior authorization requirements exclude drugs, so pharmacy benefit drug authorizations follow other processes.
 
